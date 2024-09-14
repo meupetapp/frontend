@@ -1,19 +1,29 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --input-background: #f0f0f0;
+  --input-border: #cccccc;
+  --button-background: #007bff;
+  --button-color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --input-background: #1a1a1a;
+    --input-border: #333333;
+    --button-background: #0056b3;
+    --button-color: #ffffff;
   }
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  height: 100%; /* Garante que html e body ocupem toda a altura da viewport */
+  margin: 0; /* Remove margens padrão */
+  padding: 0; /* Remove padding padrão */
+  overflow: hidden; /* Impede rolagem, se necessário */
 }
 
 body {
@@ -22,7 +32,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
+
 
 * {
   box-sizing: border-box;
