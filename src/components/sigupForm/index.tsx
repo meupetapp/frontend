@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FormContainer, Input, Button, H3, P, Line, LineContainer, Text, ButtonAllign, Icon, FormWrapper, PageContainer, TitleWrapper } from './styles';
+import { Button, P, Line, LineContainer, Text, ButtonAllign, Icon } from './styles';
 import GoogleButton from '../GoogleButton';
+import { PageContainerComponent, FormContainerComponent, FormWrapperComponent } from '../FormComponents';
+import { TitleText, TitleWrapperComponent } from '../TitleComponents';
+import IconComponent from '../IconComponent';
 import FacebookButton from '../FacebookButton';
 import InputWithIcon from '../InputWithIcon';
 
@@ -28,16 +31,12 @@ const SignUpForm: React.FC = () => {
     };
 
     return (
-        <PageContainer>
-            <Icon src="/icons/Logo.svg" alt="Logo" style={{ height: '65px', width: '65px', top: '15px' }} />
-            <Link href={"/home"}>
-                <Icon style={{ left: '15px' }} src="/icons/Arrow.svg" alt="Logo" />
-            </Link>
-            <FormWrapper>
-                <FormContainer onSubmit={handleSubmit}>
-                    <TitleWrapper>
-                        <H3>Cadastro</H3>
-                    </TitleWrapper>
+     
+            <FormWrapperComponent>
+                <FormContainerComponent onSubmit={handleSubmit}>
+                    <TitleWrapperComponent>
+                        <TitleText>Cadastro</TitleText>
+                    </TitleWrapperComponent>
                     <InputWithIcon
                         type="text"
                         placeholder="Nome completo"
@@ -89,9 +88,8 @@ const SignUpForm: React.FC = () => {
                         <Line />
                     </LineContainer>
                     <Button>Cadastrar</Button>
-                </FormContainer>
-            </FormWrapper>
-        </PageContainer>
+                </FormContainerComponent>
+            </FormWrapperComponent>
     );
 };
 
