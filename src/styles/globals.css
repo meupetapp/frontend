@@ -20,10 +20,10 @@
 
 html,
 body {
-  height: 100%; /* Garante que html e body ocupem toda a altura da viewport */
+  height: 100vh; /* Garante que html e body ocupem toda a altura da viewport */
   margin: 0; /* Remove margens padrão */
   padding: 0; /* Remove padding padrão */
-  overflow: hidden; /* Impede rolagem, se necessário */
+  overflow: auto; /* Impede rolagem, se necessário */
 }
 
 body {
