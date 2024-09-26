@@ -8,7 +8,10 @@ type ModalComponentProps = {
 };
 
 const ModalComponent: React.FC<ModalComponentProps> = ({ closeModal, showNewActivityButton = true, showNewPetButton = true }) => {
+  console.log('showNewActivityButton:', showNewActivityButton);
+console.log('showNewPetButton:', showNewPetButton);
   return (
+    
     <ModalOverlay>
       <ModalContent>
         <CloseButton onClick={closeModal}>X</CloseButton>

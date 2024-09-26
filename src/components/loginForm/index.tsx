@@ -18,6 +18,7 @@ import GoogleButton from "../GoogleButton";
 import InputWithIcon from "../InputWithIcon";
 import { FormContainerComponent, FormWrapperComponent } from "../FormComponents";
 import { TitleWrapperComponent, TitleText } from "../TitleComponents";
+import Link from "next/link";
 
 const EmailIconSrc = '/icons/Email.svg';
 const LockIconSrc = '/icons/Lock.svg';
@@ -92,9 +93,11 @@ const LoginForm: React.FC = () => {
         </LineContainer2>
 
         <SignUpText>Ainda não tem uma conta?</SignUpText>
+        <Link href={"/signup"}>
         <RedirectToCadastro onClick={handleCadastro}>
           Cadastre-se
         </RedirectToCadastro>
+        </Link>
       </FormContainerComponent>
     </FormWrapperComponent>
   );

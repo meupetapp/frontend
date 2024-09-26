@@ -9,7 +9,7 @@ const SignUpPage: React.FC = () => {
   return (
     <PageContainerComponent>
     <IconComponent src="/icons/Logo.svg" alt="Logo" width="65px" height="65px" top="15px" />
-    <Link href={"/home"}>
+    <Link href={"/login"}>
         <IconComponent  left='15px'src="/icons/Arrow.svg" alt="Logo" />
     </Link>
     <SignUpForm/>

@@ -9,7 +9,7 @@ const PetAppointmentCard = () => {
       <CardDate>6 de setembro de 2024</CardDate>
       <CardAuthor>Por Angela Soares</CardAuthor>
       <Button>Visualizar</Button>
-      </CardWrapper>
+    </CardWrapper>
   );
 };
 
