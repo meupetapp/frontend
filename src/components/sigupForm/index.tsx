@@ -13,12 +13,15 @@ const UserIconSrc = '/icons/User.svg';
 const CalendarIconSrc = '/icons/Calendar.svg';
 const LockIconSrc = '/icons/Lock.svg';
 
+
+
 const SignUpForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [birthday, setBirthday] = useState('');
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
