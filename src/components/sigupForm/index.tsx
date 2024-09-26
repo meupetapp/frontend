@@ -7,6 +7,8 @@ import { TitleText, TitleWrapperComponent } from '../TitleComponents';
 import IconComponent from '../IconComponent';
 import FacebookButton from '../FacebookButton';
 import InputWithIcon from '../InputWithIcon';
+import { registerUser } from '@/services/userService'; // Importe o serviço de registro
+import { useRouter } from 'next/router'; // Importando o useRouter
 
 const EmailIconSrc = '/icons/Email.svg';
 const UserIconSrc = '/icons/User.svg';
@@ -19,19 +21,31 @@ const SignUpForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [birthday, setBirthday] = useState('');
 
+    const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (password !== confirmPassword) {
             alert('As senhas não coincidem.');
             return;
         }
-        // Aqui você pode adicionar a lógica de cadastro
-        console.log({ email, password, name, birthday });
+
+        try {
+            const data = await registerUser(username, email, password);
+            alert('Usuário cadastrado com sucesso!');
+            console.log('Resposta do backend:', data);
+            
+            // Redireciona o usuário para a página de login após o cadastro
+            router.push('/login');
+        } catch (error: any) {
+            alert(`Erro ao registrar: ${error.message}`);
+        }
     };
+    
 
     return (
      
@@ -44,8 +58,8 @@ const SignUpForm: React.FC = () => {
                         type="text"
                         placeholder="Nome completo"
                         iconSrc={UserIconSrc}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     <InputWithIcon
                         type="date"
