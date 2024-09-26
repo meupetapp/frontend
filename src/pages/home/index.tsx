@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
       // Controle do botão "Novo Pet"
   const [pets, setPets] = useState([]);
   useEffect(() => {
-    listPets("66f07ad216db41cd041ad705")
+    listPets("66f5c2bf757103cc308f0b5e")
       .then((res) => {
         setPets(res);
       })

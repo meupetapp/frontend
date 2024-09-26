@@ -3,7 +3,7 @@ import axios from 'axios';
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/',
   headers: {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZjA3YWQyMTZkYjQxY2QwNDFhZDcwNSIsImVtYWlsIjoibHVsdUBnbWFpbC5jb20iLCJpYXQiOjE3MjczODI2OTUsImV4cCI6MTcyNzM4NjI5NX0.6GI3gwj8GvjphIx57ELfUqZ6vhVCMI2cgoY7x8brEQ0`
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZjVjMmJmNzU3MTAzY2MzMDhmMGI1ZSIsImVtYWlsIjoiYW1hbmRhQGdtYWlsLmNvbSIsImlhdCI6MTcyNzM4NTQ4MiwiZXhwIjoxNzI3Mzg5MDgyfQ.3e_w6298KAfdXWmFWHVltSuDR6pKyBUoBn3ptOVEBFY`
   }
 });
 
@@ -31,3 +31,4 @@ export const getPetDetail = async (petId: string, userId: string) => {
     throw error;
   }
 };
+

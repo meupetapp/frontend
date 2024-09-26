@@ -6,8 +6,8 @@ import { CardWrapper } from '@/components/Cardscomponents/styles';
 import PetAppointmentCard from '@/components/ActivityList';
 import DropdownComponent from '@/components/DropdownComponent';
 import ModalComponent from '@/components/ModalComponent';
-import { useRouter } from 'next/router'; // Para pegar o petId da query
-import { getPetDetail } from '@/Service/petService'; // Função de busca de detalhes do pet
+import { useRouter } from 'next/router';
+import { getPetDetail } from '@/Service/petService';
 import Link from 'next/link';
 
 const ActivityPage: React.FC = () => {
@@ -21,10 +21,10 @@ const ActivityPage: React.FC = () => {
 
   useEffect(() => {
     if (petId) {
+      console.log("Fetching pet details for petId:", petId);
       // Chama a função para obter os detalhes do pet
-      getPetDetail(petId, "66f07ad216db41cd041ad705")
+      getPetDetail(petId, "66f5c2bf757103cc308f0b5e") // Certifique-se de que este ID de usuário esteja correto
         .then((res) => {
-         
           setPet(res.pet); // Armazena os detalhes do pet no estado
         })
         .catch((error) => {

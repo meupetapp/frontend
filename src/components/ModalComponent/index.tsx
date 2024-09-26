@@ -17,13 +17,16 @@ console.log('showNewPetButton:', showNewPetButton);
         <CloseButton onClick={closeModal}>X</CloseButton>
         
         {showNewActivityButton && ( 
-  
-        <ModalButton onClick={() => console.log('Nova Atividade clicada')}>Nova Atividade</ModalButton>
-
+         
+        <ModalButton >Nova Atividade</ModalButton>
+     
         )}
         
         {showNewPetButton && (
+           <Link href={"/newpet"}>
         <ModalButton onClick={() => console.log('Novo Pet clicado')}>Novo Pet</ModalButton>
+          </Link>
+
         )}
         
       </ModalContent>
