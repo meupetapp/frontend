@@ -56,3 +56,14 @@ export const TitleWrapper = styled.div`
   position: relative;
   z-index: 2; /* Garante que o título esteja sobre o restante do formulário */
 `;
+
+export const GreenPageContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #C8C8A9; /* Fundo verde */
+  background-size: cover;
+  box-sizing: border-box;
+  position: relative;
+`;
