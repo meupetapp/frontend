@@ -7,7 +7,7 @@ import PetAppointmentCard from '@/components/ActivityList';
 import DropdownComponent from '@/components/DropdownComponent';
 import ModalComponent from '@/components/ModalComponent';
 import { useRouter } from 'next/router';
-import { getPetDetail } from '@/Service/petService';
+import { getPetDetail } from '@/service/petService';
 import Link from 'next/link';
 
 const ActivityPage: React.FC = () => {

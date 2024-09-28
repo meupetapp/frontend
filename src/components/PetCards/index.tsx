@@ -7,7 +7,7 @@ const PetCards = ({ SelectIcon, pet }) => {
   const router = useRouter();
 
   // Função para calcular a idade do pet em anos e meses
-  const calculateAge = (birthDate) => {
+  const calculateAge = (birthDate: string | number | Date) => {
     const birth = new Date(birthDate);
     const today = new Date();
     

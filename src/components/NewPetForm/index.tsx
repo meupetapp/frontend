@@ -23,6 +23,8 @@ const Breed = "/icons/Breed.svg";
 const Calendar = "/icons/Calendar.svg";
 const Gender = "/icons/Gender.svg";
 const Color = "/icons/Color.svg";
+import { createPet } from "@/service/petService";
+import { useRouter } from 'next/router'; 
 
 const NewPetForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -33,10 +35,29 @@ const NewPetForm: React.FC = () => {
   const [color, setColor] = useState("");
   const [adoption, setAdoption] = useState("");
   const [toggle, setToggle] = useState<boolean>(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name, species, breed, birth, gender, color, adoption });
+
+    try {
+      // Chame a função createPet com os dados do formulário
+      const data = await createPet(
+        name, 
+        species, 
+        breed, 
+        birth, 
+        gender, 
+        color, 
+        toggle, 
+        toggle ? adoption : undefined // Só passa a data de adoção se o toggle estiver ativado
+      );
+
+      alert('Pet criado com sucesso!');
+      console.log('Resposta do backend:', data);
+      router.push('/home');
+    } catch (error: any) {
+      alert(`Erro ao criar pet: ${error.message}`);
+    }
   };
 
   return (

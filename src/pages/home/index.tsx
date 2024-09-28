@@ -4,7 +4,8 @@ import { PageContainerComponent } from '@/components/FormComponents';
 import IconComponent from '@/components/IconComponent';
 import { CardWrapper } from '@/components/Cardscomponents/styles';
 import ModalComponent from '@/components/ModalComponent';
-import { listPets } from '@/Service/petService';
+import { listPets } from '@/service/petService';
+import { cookies } from 'next/headers';
 
 
 const HomePage: React.FC = () => {
@@ -13,8 +14,11 @@ const HomePage: React.FC = () => {
   const [showNewPetButton, setShowNewPetButton] = useState(false); // Iniciar como false
       // Controle do botão "Novo Pet"
   const [pets, setPets] = useState([]);
+
+  const allCookies = document.cookie;
+  console.log('@allCookies', allCookies)
   useEffect(() => {
-    listPets("66f5c2bf757103cc308f0b5e")
+    listPets()
       .then((res) => {
         setPets(res);
       })
