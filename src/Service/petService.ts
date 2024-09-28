@@ -95,7 +95,9 @@ export const listPets = async () => {
 };
 
 // Nova função para buscar detalhes do pet
-export const getPetDetail = async (petId: string, userId: string) => {
+export const getPetDetail = async (petId: string) => {
+  const userId = getUserIdFromCookies(); 
+  console.log("Userid",userId);
   try {
     const response = await axiosInstance.get(`/pet/${petId}`, {
       headers: {

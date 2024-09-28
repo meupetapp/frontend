@@ -23,7 +23,7 @@ const ActivityPage: React.FC = () => {
     if (petId) {
       console.log("Fetching pet details for petId:", petId);
       // Chama a função para obter os detalhes do pet
-      getPetDetail(petId, "66f5c2bf757103cc308f0b5e") // Certifique-se de que este ID de usuário esteja correto
+      getPetDetail(petId) // Certifique-se de que este ID de usuário esteja correto
         .then((res) => {
           setPet(res.pet); // Armazena os detalhes do pet no estado
         })
