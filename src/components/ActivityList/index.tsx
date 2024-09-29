@@ -2,12 +2,12 @@ import React from 'react';
 import { CardTitle, CardDate, CardAuthor, Button, CardWrapper } from './styles';
 import DropdownComponent from '../DropdownComponent';
 
-const PetAppointmentCard = () => {
+const PetAppointmentCard = ({title, dateTime}: { dateTime: Date; title: string}) => {
   return (
     <CardWrapper>
-      <CardTitle>Consulta Veterinária de Rotina</CardTitle>
-      <CardDate>6 de setembro de 2024</CardDate>
-      <CardAuthor>Por Angela Soares</CardAuthor>
+      <CardTitle>{title}</CardTitle>
+      <CardDate>{dateTime.toTimeString()}</CardDate>
+      {/* <CardAuthor>Por Angela Soares</CardAuthor> */}
       <Button>Visualizar</Button>
     </CardWrapper>
   );

@@ -17,10 +17,10 @@ import FacebookButton from "../FacebookButton";
 import GoogleButton from "../GoogleButton";
 import InputWithIcon from "../InputWithIcon";
 import { useRouter } from 'next/router'; // Para redirecionar
-import { loginUser } from '@/service/userService'; // Importe a função de logi
 import { FormContainerComponent, FormWrapperComponent } from "../FormComponents";
 import { TitleWrapperComponent, TitleText } from "../TitleComponents";
 import Link from "next/link";
+import { loginUser } from "@/service/userService";
 
 const EmailIconSrc = '/icons/Email.svg';
 const LockIconSrc = '/icons/Lock.svg';

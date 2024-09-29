@@ -15,7 +15,8 @@ const ActivityPage: React.FC = () => {
   const [showNewActivityButton, setShowNewActivityButton] = useState(false);
   const [showNewPetButton, setShowNewPetButton] = useState(false);
   const [pet, setPet] = useState(null);
-  
+  const [activities, setActivities] = useState([]);
+
   const router = useRouter();
   const { petId } = router.query; // Receber o petId da query
 
@@ -23,15 +24,22 @@ const ActivityPage: React.FC = () => {
     if (petId) {
       console.log("Fetching pet details for petId:", petId);
       // Chama a função para obter os detalhes do pet
-      getPetDetail(petId) // Certifique-se de que este ID de usuário esteja correto
+      getPetDetail(petId as string) // Certifique-se de que este ID de usuário esteja correto
         .then((res) => {
           setPet(res.pet); // Armazena os detalhes do pet no estado
+          setActivities(res.activities); // Armazena as atividades do pet no estado
         })
         .catch((error) => {
           console.error('Erro ao buscar detalhes do pet:', error);
         });
     }
   }, [petId]);
+
+  useEffect(() => {
+    if (!petId) {
+      router.push('/home');
+    }
+  });
 
   const handleOpenModal = (showActivity: boolean, showPet: boolean) => {
     setShowNewActivityButton(showActivity);
@@ -49,7 +57,7 @@ const ActivityPage: React.FC = () => {
         <IconComponent left="15px" src="/icons/Arrow.svg" alt="Voltar" />
       </Link>
       <IconComponent right="15px" src="/icons/Add.svg" alt="Adicionar" onClick={() => handleOpenModal(true, false)} />
-      
+
       <CardWrapper>
         {pet ? (
           <PetCards pet={pet} SelectIcon="/icons/Edit.svg" />
@@ -58,8 +66,10 @@ const ActivityPage: React.FC = () => {
         )}
 
         <DropdownComponent />
-        <PetAppointmentCard />
-        <PetAppointmentCard />
+        {
+          activities.map((ac: any) => <PetAppointmentCard
+            title={ac.title} dateTime={new Date(ac.time)} />)
+        }
       </CardWrapper>
 
       {isModalOpen && (

@@ -4,19 +4,16 @@ import { PageContainerComponent } from '@/components/FormComponents';
 import IconComponent from '@/components/IconComponent';
 import { CardWrapper } from '@/components/Cardscomponents/styles';
 import ModalComponent from '@/components/ModalComponent';
-import { listPets } from '@/service/petService';
 import { cookies } from 'next/headers';
+import { listPets } from '@/service/petService';
 
 
 const HomePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNewActivityButton, setShowNewActivityButton] = useState(false); // Iniciar como false
   const [showNewPetButton, setShowNewPetButton] = useState(false); // Iniciar como false
-      // Controle do botão "Novo Pet"
   const [pets, setPets] = useState([]);
 
-  const allCookies = document.cookie;
-  console.log('@allCookies', allCookies)
   useEffect(() => {
     listPets()
       .then((res) => {
@@ -37,12 +34,12 @@ const HomePage: React.FC = () => {
 
   return (
     <PageContainerComponent>
-<IconComponent 
-  src="/icons/Add.svg" 
-  alt="Add" 
-  top="40px" 
-  onClick={() => handleOpenModal(false, true)}  // Apenas "Novo Pet"
-/>
+      <IconComponent
+        src="/icons/Add.svg"
+        alt="Add"
+        top="40px"
+        onClick={() => handleOpenModal(false, true)}  // Apenas "Novo Pet"
+      />
       <CardWrapper>
         {pets.map((pet) => (
           <PetCards pet={pet} SelectIcon="/icons/Select.svg" />
@@ -50,10 +47,10 @@ const HomePage: React.FC = () => {
       </CardWrapper>
 
       {isModalOpen && (
-        <ModalComponent 
-          closeModal={handleCloseModal} 
-          showNewActivityButton={showNewActivityButton} 
-          showNewPetButton={showNewPetButton} 
+        <ModalComponent
+          closeModal={handleCloseModal}
+          showNewActivityButton={showNewActivityButton}
+          showNewPetButton={showNewPetButton}
         />
       )}
     </PageContainerComponent>
