@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 // Container para a data e o dropdown do pet na mesma linha
 export const InputRow = styled.div`
   display: flex;
