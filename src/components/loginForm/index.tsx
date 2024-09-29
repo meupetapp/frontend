@@ -17,9 +17,10 @@ import FacebookButton from "../FacebookButton";
 import GoogleButton from "../GoogleButton";
 import InputWithIcon from "../InputWithIcon";
 import { useRouter } from 'next/router'; // Para redirecionar
-import { loginUser } from '@/services/userService'; // Importe a função de logi
+import { loginUser } from '@/service/userService'; // Importe a função de logi
 import { FormContainerComponent, FormWrapperComponent } from "../FormComponents";
 import { TitleWrapperComponent, TitleText } from "../TitleComponents";
+import Link from "next/link";
 
 const EmailIconSrc = '/icons/Email.svg';
 const LockIconSrc = '/icons/Lock.svg';
@@ -37,7 +38,9 @@ const LoginForm: React.FC = () => {
       console.log('Token recebido:', data.token);
 
       const token = data.token;
-      document.cookie = `token=${token}; path=/`;
+      document.cookie = `token=${token}; path=/;`;
+      document.cookie = `userID=${data.userId}; path=/;`
+   
 
       // Redirecionar para uma página protegida após o login
       router.push('/home'); // Altere para a página para onde deseja redirecionar
@@ -105,9 +108,11 @@ const LoginForm: React.FC = () => {
         </LineContainer2>
 
         <SignUpText>Ainda não tem uma conta?</SignUpText>
+        <Link href={"/signup"}>
         <RedirectToCadastro onClick={handleCadastro}>
           Cadastre-se
         </RedirectToCadastro>
+        </Link>
       </FormContainerComponent>
     </FormWrapperComponent>
   );

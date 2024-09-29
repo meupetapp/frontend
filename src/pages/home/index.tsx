@@ -4,41 +4,58 @@ import { PageContainerComponent } from '@/components/FormComponents';
 import IconComponent from '@/components/IconComponent';
 import { CardWrapper } from '@/components/Cardscomponents/styles';
 import ModalComponent from '@/components/ModalComponent';
-import { listPets } from '@/Service/petService';
+import { listPets } from '@/service/petService';
+import { cookies } from 'next/headers';
 
 
 const HomePage: React.FC = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [showNewActivityButton, setShowNewActivityButton] = useState(true); // Controle do botão "Nova Atividade"
-  const [showNewPetButton, setShowNewPetButton] = useState(true);           // Controle do botão "Novo Pet"
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showNewActivityButton, setShowNewActivityButton] = useState(false); // Iniciar como false
+  const [showNewPetButton, setShowNewPetButton] = useState(false); // Iniciar como false
+      // Controle do botão "Novo Pet"
   const [pets, setPets] = useState([]);
+
+  const allCookies = document.cookie;
+  console.log('@allCookies', allCookies)
   useEffect(() => {
-    listPets("66f07ad216db41cd041ad705")
+    listPets()
       .then((res) => {
-        console.log('@pets ->', res)
         setPets(res);
       })
   }, [])
+
+
   const handleOpenModal = (showActivity: boolean, showPet: boolean) => {
-    setShowNewActivityButton(showActivity);
-    setShowNewPetButton(showPet);
-    setModalOpen(true); // Abre o modal
+    setShowNewActivityButton(showActivity); // Atualizar estado corretamente
+    setShowNewPetButton(showPet);           // Atualizar estado corretamente
+    setIsModalOpen(true);                   // Abrir o modal
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false); // Fecha o modal
+    setIsModalOpen(false);                  // Fechar o modal
   };
 
   return (
     <PageContainerComponent>
-<IconComponent src="/icons/Add.svg" alt="Add" top="40px" onClick={() => handleOpenModal(true, true)}  />
+<IconComponent 
+  src="/icons/Add.svg" 
+  alt="Add" 
+  top="40px" 
+  onClick={() => handleOpenModal(false, true)}  // Apenas "Novo Pet"
+/>
       <CardWrapper>
         {pets.map((pet) => (
           <PetCards pet={pet} SelectIcon="/icons/Select.svg" />
         ))}
       </CardWrapper>
 
-      {isModalOpen && <ModalComponent closeModal={handleCloseModal} />}
+      {isModalOpen && (
+        <ModalComponent 
+          closeModal={handleCloseModal} 
+          showNewActivityButton={showNewActivityButton} 
+          showNewPetButton={showNewPetButton} 
+        />
+      )}
     </PageContainerComponent>
   );
 };

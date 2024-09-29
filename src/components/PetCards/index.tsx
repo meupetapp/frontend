@@ -1,46 +1,67 @@
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { Card, PetImage, PetInfo, PetName, PetBreed, PetDetails, LastMeal, MealText, MealTime, IconWrapper, FlexContainer, PetInfoContainer } from './styles';
 import IconComponent from '../IconComponent';
-import { listPets } from '@/Service/petService';
-import Link from 'next/link';
 
 const PetCards = ({ SelectIcon, pet }) => {
-  
+  const router = useRouter();
+
+  // Função para calcular a idade do pet em anos e meses
+  const calculateAge = (birthDate: string | number | Date) => {
+    const birth = new Date(birthDate);
+    const today = new Date();
+    
+    let ageInYears = today.getFullYear() - birth.getFullYear();
+    const monthDifference = today.getMonth() - birth.getMonth();
+    let ageInMonths = monthDifference < 0 ? 12 + monthDifference : monthDifference;
+
+    if (monthDifference < 0) {
+      ageInYears--;
+    }
+
+    return { years: ageInYears, months: ageInMonths };
+  };
+
+  // Função para redirecionar para a página de atividades e enviar o ID do pet
+  const handlePetSelection = () => {
+    console.log("Enviando petId:", pet._id);
+    router.push({
+      pathname: '/Activities',
+      query: { petId: pet._id },
+    });
+  };
+
+  // Calcula a idade
+  const age = calculateAge(pet.birthDate);
+
   return (
     <Card>
-      {/* Alinhamento Horizontal da Imagem e PetInfo */}
       <FlexContainer>
         <PetInfoContainer>
-          {/* Imagem do Pet */}
           <PetImage src={pet.photo} alt="Pet" />
-          
           <PetInfo>
             <PetName>{pet.name}</PetName>
             <PetBreed>{pet.breed}</PetBreed>
-            <PetDetails>{pet.birthDate}</PetDetails>
+            {/* Exibindo a idade em anos e meses */}
+            <PetDetails>{age.years} anos e {age.months} meses</PetDetails>
           </PetInfo>
-          {/* Informações do Pet */}
-
         </PetInfoContainer>
 
-        {/* Ícone de seta (agora dinâmico com prop) */}
         <IconWrapper style={{ top: '10px', right: '40px' }}>
-        <Link href={"/Activities"}>
-          <IconComponent
-            src={SelectIcon}
-            alt="Arrow Icon"
-            width="35px"
-            height="35px"
-          /></Link>
+          <div onClick={handlePetSelection}>
+            <IconComponent
+              src={SelectIcon}
+              alt="Arrow Icon"
+              width="35px"
+              height="35px"
+            />
+          </div>
         </IconWrapper>
       </FlexContainer>
 
-      {/* Última Refeição abaixo das Informações do Pet */}
       <LastMeal>
         <MealText>Última Refeição</MealText>
         <MealTime>12:00 por Angela Soares</MealTime>
-
-        {/* Ícone de atualização */}
         <IconWrapper style={{ bottom: '70px', right: '10px' }}>
           <IconComponent
             src="/icons/Refresh.svg"

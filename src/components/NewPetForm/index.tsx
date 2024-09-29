@@ -14,6 +14,8 @@ import {
 import InputWithIcon from "../InputWithIcon";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { PageContainerComponent } from "../Cardscomponents";
+import { FormContainerComponent, FormWrapperComponent } from "../FormComponents";
 
 const PetMemberCard = "/icons/PetMemberCard.svg";
 const Species = "/icons/Species.svg";
@@ -21,6 +23,8 @@ const Breed = "/icons/Breed.svg";
 const Calendar = "/icons/Calendar.svg";
 const Gender = "/icons/Gender.svg";
 const Color = "/icons/Color.svg";
+import { createPet } from "@/service/petService";
+import { useRouter } from 'next/router'; 
 
 const NewPetForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -31,28 +35,35 @@ const NewPetForm: React.FC = () => {
   const [color, setColor] = useState("");
   const [adoption, setAdoption] = useState("");
   const [toggle, setToggle] = useState<boolean>(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name, species, breed, birth, gender, color, adoption });
+
+    try {
+      // Chame a função createPet com os dados do formulário
+      const data = await createPet(
+        name, 
+        species, 
+        breed, 
+        birth, 
+        gender, 
+        color, 
+        toggle, 
+        toggle ? adoption : undefined // Só passa a data de adoção se o toggle estiver ativado
+      );
+
+      alert('Pet criado com sucesso!');
+      console.log('Resposta do backend:', data);
+      router.push('/home');
+    } catch (error: any) {
+      alert(`Erro ao criar pet: ${error.message}`);
+    }
   };
 
   return (
-    <PageContainer>
-      <Icon
-        src="/icons/Logo.svg"
-        alt="Logo"
-        style={{ height: "65px", width: "65px", top: "25px", right: "55px" }}
-      />
-      <Link href={"/home"}>
-        <Icon
-          style={{ left: "65px", top: "45px" }}
-          src="/icons/Arrow.svg"
-          alt="Logo"
-        />
-      </Link>
-      <FormWrapper>
-        <FormContainer onSubmit={handleSubmit}>
+     
+      <FormWrapperComponent>
+        <FormContainerComponent onSubmit={handleSubmit}>
           <TitleWrapper>
             <H3>Novo Pet</H3>
           </TitleWrapper>
@@ -161,9 +172,8 @@ const NewPetForm: React.FC = () => {
           </div>
 
           <CreateButton type="submit">Criar</CreateButton>
-        </FormContainer>
-      </FormWrapper>
-    </PageContainer>
+        </FormContainerComponent>
+      </FormWrapperComponent>
   );
 };
 

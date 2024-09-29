@@ -7,7 +7,7 @@ import { TitleText, TitleWrapperComponent } from '../TitleComponents';
 import IconComponent from '../IconComponent';
 import FacebookButton from '../FacebookButton';
 import InputWithIcon from '../InputWithIcon';
-import { registerUser } from '@/services/userService'; // Importe o serviço de registro
+import { registerUser } from '@/service/userService'; // Importe o serviço de registro
 import { useRouter } from 'next/router'; // Importando o useRouter
 
 const EmailIconSrc = '/icons/Email.svg';

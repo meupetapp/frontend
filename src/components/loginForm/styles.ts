@@ -26,7 +26,6 @@ export const FormWrapper = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background: url('/login-background.svg') no-repeat center center;
   background-size: cover;
   position: relative;
   box-sizing: border-box; /* Garante que o padding não cause overflow */
