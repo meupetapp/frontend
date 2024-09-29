@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
         src="/icons/Add.svg"
         alt="Add"
         top="40px"
-        onClick={() => handleOpenModal(false, true)}  // Apenas "Novo Pet"
+        onClick={() => handleOpenModal(true, true)}  // Apenas "Novo Pet"
       />
       <CardWrapper>
         {pets.map((pet) => (

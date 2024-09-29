@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Função para pegar o valor de um cookie pelo nome
-const getCookie = (cookieName) => {
+export const getCookie = (cookieName: string) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${cookieName}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
@@ -19,7 +19,7 @@ const getUserIdFromCookies = () => {
 
 // Criação dinâmica do axiosInstance com o token do cookie
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: `http://localhost:${process.env.NEXT_PUBLIC_PORT}`,
 });
 
 // Função para criar um novo pet com foto genérica

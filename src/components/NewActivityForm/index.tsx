@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { TitleInput, DateInput, PetDropdown, ActivityTypeDropdown, DescriptionInput, InputRow, AttachmentContainer, AttachmentBlock, FormContainer } from './styles';
 import IconComponent from '@/components/IconComponent'; // Importando o componente de ícone
-import { getUserIdFromCookies, listPets } from '@/service/petService';
+import {  listPets } from '@/service/petService';
 import { Button } from '../ActivityList/styles';
 import { createActivity } from '@/service/activityService';
+import { useRouter } from 'next/router'; 
 
 const NewActivityForm: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -13,14 +14,20 @@ const NewActivityForm: React.FC = () => {
   const [type, setType] = useState(''); // category
   const [description, setDescription] = useState('');
   const [attachments, setAttachments] = useState<string[]>([]);
+  const router = useRouter();
 
   // Função para adicionar um novo anexo
   const addAttachment = () => {
     setAttachments([...attachments, `Anexo ${attachments.length + 1}`]);
   };
 
-  const handleSubmit = () => {
-    console.log(`title: ${title}\n date: ${time}\npetName: ${petId}\n category: ${type}\n description: ${description} `);
+  const handleSubmit = async () => {
+    // Verifica se todos os campos obrigatórios estão preenchidos
+    if (!title || !time || !petId || !type || !description) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+  
     const body = {
       title,
       time: new Date(time),
@@ -28,12 +35,18 @@ const NewActivityForm: React.FC = () => {
       type,
       description
     };
-
-    createActivity(body).then((res) => {
+  
+    try {
+      const res = await createActivity(body);
       console.log('Atividade criada:', res);
-    });
-
-  }
+      alert('Atividade criada com sucesso!');
+      router.push("/home");
+    } catch (error: any) {
+      console.error('Erro ao criar a atividade:', error);
+      alert(`Erro ao criar a atividade: ${error.response?.data?.error || 'Erro desconhecido'}`);
+    }
+  };
+  
 
 
   useEffect(() => {
@@ -53,6 +66,7 @@ const NewActivityForm: React.FC = () => {
         placeholder="Título..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        required
       />
       <InputRow>
         <DateInput
@@ -60,6 +74,7 @@ const NewActivityForm: React.FC = () => {
           placeholder="Data"
           value={time}
           onChange={(e) => setTime(e.target.value)}
+          required
         />
         <PetDropdown
           value={petId}
@@ -97,6 +112,7 @@ const NewActivityForm: React.FC = () => {
         placeholder="Descrição..."
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        required  
       />
       <Button
         onClick={handleSubmit}
