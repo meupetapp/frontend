@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/',
+  baseURL: `http://localhost:${process.env.NEXT_PUBLIC_PORT}`,
 })
 
 export const registerUser = async (username: string, email: string, password: string) => {
