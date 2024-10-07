@@ -14,6 +14,7 @@ const ActivityPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNewActivityButton, setShowNewActivityButton] = useState(false);
   const [showNewPetButton, setShowNewPetButton] = useState(false);
+  const [showUserPermission, setShowUserPermission] = useState(false);
   const [pet, setPet] = useState(null);
   const [activities, setActivities] = useState([]);
 
@@ -41,9 +42,10 @@ const ActivityPage: React.FC = () => {
     }
   });
 
-  const handleOpenModal = (showActivity: boolean, showPet: boolean) => {
+  const handleOpenModal = (showActivity: boolean, showPet: boolean, showUserPermission: boolean) => {
     setShowNewActivityButton(showActivity);
     setShowNewPetButton(showPet);
+    setShowUserPermission(showUserPermission);
     setIsModalOpen(true);
   };
 
@@ -56,7 +58,7 @@ const ActivityPage: React.FC = () => {
       <Link href="/home">
         <IconComponent left="15px" src="/icons/Arrow.svg" alt="Voltar" />
       </Link>
-      <IconComponent right="15px" src="/icons/Add.svg" alt="Adicionar" onClick={() => handleOpenModal(true, false)} />
+      <IconComponent right="15px" src="/icons/Add.svg" alt="Adicionar" onClick={() => handleOpenModal(true, false, true)} />
 
       <CardWrapper>
         {pet ? (
@@ -77,6 +79,7 @@ const ActivityPage: React.FC = () => {
           closeModal={handleCloseModal}
           showNewActivityButton={showNewActivityButton}
           showNewPetButton={showNewPetButton}
+          showUserPermission={showUserPermission}
         />
       )}
     </PageContainerComponent>
