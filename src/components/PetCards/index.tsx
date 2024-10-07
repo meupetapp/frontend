@@ -36,6 +36,7 @@ const PetCards = ({ SelectIcon, pet }) => {
 
   return (
     <Card>
+
       <FlexContainer>
         <PetInfoContainer>
           <PetImage src={pet.photo} alt="Pet" />

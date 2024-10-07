@@ -64,13 +64,13 @@ const ActivityPage: React.FC = () => {
         ) : (
           <p>Carregando detalhes do pet...</p>
         )}
+        </CardWrapper>
 
         <DropdownComponent />
         {
           activities.map((ac: any) => <PetAppointmentCard
             title={ac.title} dateTime={new Date(ac.time)} />)
         }
-      </CardWrapper>
 
       {isModalOpen && (
         <ModalComponent
