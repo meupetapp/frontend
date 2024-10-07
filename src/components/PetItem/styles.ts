@@ -5,7 +5,6 @@ export const PetItemStyle = styled.div`
   border-radius: 20px;
   height: 85px;
   width: 85%;
-
   color: #556270;
 
   .pet-header {
@@ -38,5 +37,27 @@ export const PetItemStyle = styled.div`
     background-color: #f7efd8;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+  }
+
+  .new-access-button {
+    background-color: #4A4A4D;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background-color: #383838;
+    }
   }
 `;
