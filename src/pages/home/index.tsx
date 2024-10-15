@@ -94,7 +94,6 @@ const HomePage: React.FC = () => {
         setIsScheduled={setIsScheduled} // Passando a função para alterar o estado
       />
 
-      {/* Exibir atividades agendadas e ocorridas */}
       <CardWrapper style={{ marginTop: '5px' }}>
         {petsWithActivities.map((pet) => (
           <div key={pet._id}>
@@ -110,6 +109,10 @@ const HomePage: React.FC = () => {
                         petName={pet.name}
                         date={new Date(activity.time)}
                         author={activity.author}
+                        activityId={activity._id} // Passar o ID da atividade
+                        petId={pet._id} // Passar o ID do pet
+                        type={activity.type} // Passar o tipo de atividade
+                        description={decodeURIComponent(activity.description)} // Decodifica aqui
                       />
                     ))}
                   </>
@@ -125,6 +128,10 @@ const HomePage: React.FC = () => {
                         petName={pet.name}
                         date={new Date(activity.time)}
                         author={activity.author}
+                        activityId={activity._id} // Passar o ID da atividade
+                        petId={pet._id} // Passar o ID do pet
+                        type={activity.type} // Passar o tipo de atividade
+                        description={decodeURIComponent(activity.description)} // Decodifica aqui
                       />
                     ))}
                   </>
@@ -134,6 +141,8 @@ const HomePage: React.FC = () => {
           </div>
         ))}
       </CardWrapper>
+
+
 
       {isModalOpen && (
         <ModalComponent
