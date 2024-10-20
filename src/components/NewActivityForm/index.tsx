@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { TitleInput, DateInput, PetDropdown, ActivityTypeDropdown, DescriptionInput, InputRow, AttachmentContainer, AttachmentBlock, FormContainer } from './styles';
 import IconComponent from '@/components/IconComponent'; // Importando o componente de ícone
-import {  listPets } from '@/service/petService';
+import { listPets } from '@/service/petService';
 import { Button } from '../ActivityList/styles';
 import { createActivity } from '@/service/activityService';
 import { useRouter } from 'next/router'; 
+import ModalComponent from '@/components/ModalComponent'; // Importando o modal
 
 const NewActivityForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const [time, setTime] = useState('');
   const [pets, setPets] = useState<any[]>([]);
   const [petId, setPetId] = useState(pets.length > 0 ? pets[0]._id : '');
-  const [type, setType] = useState(''); // category
+  const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [attachments, setAttachments] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar a visibilidade do modal
   const router = useRouter();
 
   // Função para adicionar um novo anexo
@@ -22,7 +24,6 @@ const NewActivityForm: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    // Verifica se todos os campos obrigatórios estão preenchidos
     if (!title || !time || !petId || !type || !description) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
@@ -46,19 +47,15 @@ const NewActivityForm: React.FC = () => {
       alert(`Erro ao criar a atividade: ${error.response?.data?.error || 'Erro desconhecido'}`);
     }
   };
-  
-
 
   useEffect(() => {
     listPets().then((pets) => {
-      console.log(pets);
       setPets(pets);
       if (pets.length > 0) {
         setPetId(pets[0]._id); // Defina o primeiro pet assim que carregar
       }
-    }
-    );
-  }, [])
+    });
+  }, []);
 
   return (
     <FormContainer style={{ display: 'flex' }}>
@@ -78,9 +75,7 @@ const NewActivityForm: React.FC = () => {
         />
         <PetDropdown
           value={petId}
-          onChange={(e) => {
-            setPetId(e.target.value);
-          }}
+          onChange={(e) => setPetId(e.target.value)}
         >
           {pets.map((pet) => (
             <option key={pet._id} value={pet._id}>
@@ -114,13 +109,23 @@ const NewActivityForm: React.FC = () => {
         onChange={(e) => setDescription(e.target.value)}
         required  
       />
-      <Button
-        onClick={handleSubmit}
-      >
-        Adicionar Atividade
-      </Button>
-      {/* Botão para adicionar anexo */}
-      <IconComponent src="/icons/Add.svg" alt="Adicionar Anexo" onClick={addAttachment} />
+      <Button onClick={handleSubmit}>Adicionar Atividade</Button>
+
+      {/* Ícone para abrir o modal */}
+      <IconComponent src="/icons/Add.svg" alt="Adicionar Anexo" onClick={() => setIsModalOpen(true)} />
+
+      {/* Modal para adicionar Imagem, Anexo, Comentário */}
+      {isModalOpen && (
+        <ModalComponent 
+          closeModal={() => setIsModalOpen(false)} 
+          addImage={true} 
+          addAnexo={true} 
+          addComment={true}
+          showNewActivityButton = {false}
+          showNewPetButton = {false}
+          onAddAttachment={addAttachment}
+        />
+      )}
     </FormContainer>
   );
 };

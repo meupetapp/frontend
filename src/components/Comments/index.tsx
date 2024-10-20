@@ -13,8 +13,8 @@ const Comments: React.FC = () => {
 
                 {/* Exemplos de comentários */}
                 <CommentContainer>
-                    <CommentHeader>Rosângela • 3 horas atrás</CommentHeader>
-                    <CommentText>Coitadinho do Marlon! 😢💔</CommentText>
+                    <CommentHeader>Rosângela • 3 horas atrás</CommentHeader> //Aqui passaria o nome do user e quando ele enviou a mensagem
+                    <CommentText>Coitadinho do Marlon! 😢💔</CommentText> //Aqui passaria o que ele escreveu no modal
                 </CommentContainer>
                 
                 <CommentContainer>
