@@ -1,21 +1,45 @@
 import React, { useState } from 'react';
 import { ModalContainer, AcessIcon, ModalContent, CloseButton, AddButton, Text } from './styles';
-
+import { useRouter } from 'next/router';
+import { createComment } from '@/service/activityService';
 interface CommentModalProps {
   closeModal: () => void;
   petId: string; // ID do pet para associar a permissão
 }
 
 const CommentModal: React.FC<CommentModalProps> = ({ closeModal, petId }) => {
+  const router = useRouter();
   const [userComment, setUserComment] = useState('');
+  const { activityId } = router.query;
+
+  // Verifica se o activityId é uma string e a utiliza
+  const id = typeof activityId === 'string' ? activityId : null;
+  
+  console.log("id de atividade",id); // Saída: 
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation(); // Evita a propagação do clique para o fundo do modal
   };
 
   const handleAddAccess = async () => {
-    // Coloque aqui o código que será executado ao enviar o comentário
-    console.log(`Comentário enviado: ${userComment}`);
+    if (!id) {
+      console.error("ID da atividade não encontrado.");
+      return;
+    }
+
+    try {
+      // Chama a função createComment para enviar o comentário
+      const response = await createComment(userComment, id);
+      console.log("Comentário enviado com sucesso:", response);
+      
+      // Limpa o comentário e fecha o modal
+      setUserComment('');
+      closeModal();
+      
+      // Opcional: redirecionar ou atualizar os dados após o comentário ser enviado
+    } catch (error) {
+      console.error("Erro ao enviar o comentário:", error);
+    }
   };
 
   return (

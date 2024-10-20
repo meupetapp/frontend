@@ -7,18 +7,34 @@ import { createActivity } from '@/service/activityService';
 import { useRouter } from 'next/router'; 
 import ModalComponent from '@/components/ModalComponent'; // Importando o modal
 
-const NewActivityForm: React.FC = () => {
-  const [title, setTitle] = useState('');
-  const [time, setTime] = useState('');
+interface NewActivityFormProps {
+  isViewMode?: boolean; // Adicionando prop para View Mode
+  activityData?: any; // Dados para pré-popular os campos no modo de visualização
+}
+
+const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, activityData }) => {
+  const [title, setTitle] = useState(activityData?.title || '');
+  const [time, setTime] = useState(activityData?.time ? new Date(activityData.time).toISOString().slice(0, 16) : '');
   const [pets, setPets] = useState<any[]>([]);
-  const [petId, setPetId] = useState(pets.length > 0 ? pets[0]._id : '');
-  const [type, setType] = useState('');
-  const [description, setDescription] = useState('');
+  const [petId, setPetId] = useState(activityData?.petId || '');
+  const [type, setType] = useState(activityData?.type || '');
+  const [description, setDescription] = useState(activityData?.description || '');
   const [attachments, setAttachments] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar a visibilidade do modal
   const router = useRouter();
 
-  // Função para adicionar um novo anexo
+  useEffect(() => {
+    if (activityData) {
+      setTitle(activityData.title || '');
+      setTime(activityData.time ? new Date(activityData.time).toISOString().slice(0, 16) : '');
+      setPetId(activityData.petId || '');
+      setType(activityData.type || '');
+      // Decodifica a descrição antes de definir no estado
+      setDescription(decodeURIComponent(activityData.description || ''));
+    }
+  }, [activityData]);
+  
+
   const addAttachment = () => {
     setAttachments([...attachments, `Anexo ${attachments.length + 1}`]);
   };
@@ -28,20 +44,20 @@ const NewActivityForm: React.FC = () => {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-  
+
     const body = {
       title,
       time: new Date(time),
       petId,
       type,
-      description
+      description,
     };
-  
+
     try {
       const res = await createActivity(body);
       console.log('Atividade criada:', res);
       alert('Atividade criada com sucesso!');
-      router.push("/home");
+      router.push('/home');
     } catch (error: any) {
       console.error('Erro ao criar a atividade:', error);
       alert(`Erro ao criar a atividade: ${error.response?.data?.error || 'Erro desconhecido'}`);
@@ -51,11 +67,16 @@ const NewActivityForm: React.FC = () => {
   useEffect(() => {
     listPets().then((pets) => {
       setPets(pets);
-      if (pets.length > 0) {
-        setPetId(pets[0]._id); // Defina o primeiro pet assim que carregar
+      // Se houver um petId vindo dos dados da atividade, usá-lo
+      if (activityData?.petId) {
+        setPetId(activityData.petId);
+      } else if (pets.length > 0) {
+        // Se não houver petId, mas houver pets na lista, usa o primeiro pet
+        setPetId(pets[0]._id);
       }
     });
-  }, []);
+  }, [activityData]); // Observe que agora o useEffect depende de activityData também
+  
 
   return (
     <FormContainer style={{ display: 'flex' }}>
@@ -64,18 +85,20 @@ const NewActivityForm: React.FC = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
+        readOnly={isViewMode} // readOnly para View Mode
       />
       <InputRow>
         <DateInput
           type="datetime-local"
-          placeholder="Data"
           value={time}
           onChange={(e) => setTime(e.target.value)}
           required
+          readOnly={isViewMode}
         />
         <PetDropdown
           value={petId}
           onChange={(e) => setPetId(e.target.value)}
+          disabled={isViewMode} // Disable no dropdown para View Mode
         >
           {pets.map((pet) => (
             <option key={pet._id} value={pet._id}>
@@ -87,15 +110,14 @@ const NewActivityForm: React.FC = () => {
 
       <AttachmentContainer>
         {attachments.map((attachment, index) => (
-          <AttachmentBlock key={index}>
-            {attachment}
-          </AttachmentBlock>
+          <AttachmentBlock key={index}>{attachment}</AttachmentBlock>
         ))}
       </AttachmentContainer>
 
       <ActivityTypeDropdown
         value={type}
         onChange={(e) => setType(e.target.value)}
+        disabled={isViewMode} // Disable no dropdown para View Mode
       >
         <option value="">Tipo de Atividade</option>
         <option value="food">Alimentação</option>
@@ -103,13 +125,15 @@ const NewActivityForm: React.FC = () => {
         <option value="aesthetics">Estética</option>
         <option value="routine">Rotina</option>
       </ActivityTypeDropdown>
+
       <DescriptionInput
         placeholder="Descrição..."
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        required  
+        required
+        readOnly={isViewMode} // readOnly para View Mode
       />
-      <Button onClick={handleSubmit}>Adicionar Atividade</Button>
+  
 
       {/* Ícone para abrir o modal */}
       <IconComponent src="/icons/Add.svg" alt="Adicionar Anexo" onClick={() => setIsModalOpen(true)} />

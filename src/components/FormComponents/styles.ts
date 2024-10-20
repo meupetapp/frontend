@@ -44,6 +44,27 @@ export const FormContainer = styled.form`
   z-index: 1;
 `;
 
+export const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: calc(100% - 30px);
+  max-width: 600px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f7efd8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 1;
+
+  .styled-title {
+    top: 110px;
+  }
+`;
+
 export const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;

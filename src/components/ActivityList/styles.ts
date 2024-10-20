@@ -27,6 +27,19 @@ export const CardDate = styled.p`
   font-family: 'Lato', sans-serif;
   margin: 5px 0;
 `;
+export const CardPet = styled.p`
+  font-size: 18px;
+  color: #556270;
+  font-family: 'Lato', sans-serif;
+  margin: 5px 0;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: #556270;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px; /* Adiciona um espaço maior entre o texto e o sublinhado */
+   font-weight: bold;
+`;
+
 
 export const CardAuthor = styled.p`
   font-size: 14px;

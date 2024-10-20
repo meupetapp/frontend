@@ -19,4 +19,14 @@ export const createActivity = async (activity: CreateActivityDTO) => {
   const token = getCookie('token');
   const created = await axiosInstance.post(`/activity`, activity, { headers: { Authorization: `Bearer ${token}` } });
   return created.data;
-}
+};
+
+export const createComment = async (comment: string, activityId: string) => {
+  const token = getCookie('token');
+  const commented = await axiosInstance.post(
+    `/comment/activity/${activityId}`,
+    { text: comment },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return commented.data;
+};

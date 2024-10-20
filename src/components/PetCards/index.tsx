@@ -38,6 +38,7 @@ const PetCards = ({ pet, isEditPage, onEditClick }) => {
 
   return (
     <Card>
+
       <FlexContainer>
         <PetInfoContainer>
           <PetImage src={pet.photo} alt="Pet" />

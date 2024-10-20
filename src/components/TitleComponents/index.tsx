@@ -8,7 +8,7 @@ type PropsWithChildren = {
 
 // Componente para o Wrapper do título
 export const TitleWrapperComponent: React.FC<PropsWithChildren> = ({ children }) => {
-    return <TitleWrapper>{children}</TitleWrapper>;
+    return <TitleWrapper className='styled-title'>{children}</TitleWrapper>;
 };
 
 // Componente para o H3 do título (você pode personalizar mais se necessário)
