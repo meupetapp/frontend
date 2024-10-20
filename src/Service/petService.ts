@@ -24,27 +24,27 @@ const axiosInstance = axios.create({
 
 // Função para criar um novo pet com foto genérica
 export const createPet = async (
-  name: string, 
-  species: string, 
-  breed: string, 
-  birthDate: string, 
-  sex: string, 
-  color: string, 
-  isAdopted: boolean, 
-  dateAdoption?: string, 
+  name: string,
+  species: string,
+  breed: string,
+  birthDate: string,
+  sex: string,
+  color: string,
+  isAdopted: boolean,
+  dateAdoption?: string,
   photo?: string
 ) => {
   try {
-    const token = getCookie('token'); 
-    const userId = getCookie('userID'); 
-    
+    const token = getCookie('token');
+    const userId = getCookie('userID');
+
     if (!token) {
       throw new Error('Token não encontrado');
     }
 
     // Define um URL genérico de foto se `photo` não for fornecido
     const defaultPhotoUrl = 'https://example.com/photos/rex.jpg';
-    
+
     const response = await axiosInstance.post(`/pet`, {
       name,
       species,
@@ -96,8 +96,8 @@ export const listPets = async () => {
 
 // Nova função para buscar detalhes do pet
 export const getPetDetail = async (petId: string) => {
-  const userId = getUserIdFromCookies(); 
-  console.log("Userid",userId);
+  const userId = getUserIdFromCookies();
+  console.log("Userid", userId);
   try {
     const response = await axiosInstance.get(`/pet/${petId}`, {
       headers: {

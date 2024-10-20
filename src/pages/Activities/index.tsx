@@ -23,16 +23,16 @@ const ActivityPage: React.FC = () => {
 
   useEffect(() => {
     if (petId) {
-      console.log("Fetching pet details for petId:", petId);
       // Chama a função para obter os detalhes do pet
-      getPetDetail(petId as string) // Certifique-se de que este ID de usuário esteja correto
+      getPetDetail(petId as string)
         .then((res) => {
-          setPet(res.pet); // Armazena os detalhes do pet no estado
-          setActivities(res.activities); // Armazena as atividades do pet no estado
+          setPet(res.pet);
+          setActivities(res.activities);
         })
         .catch((error) => {
           console.error('Erro ao buscar detalhes do pet:', error);
         });
+
     }
   }, [petId]);
 
@@ -66,13 +66,19 @@ const ActivityPage: React.FC = () => {
         ) : (
           <p>Carregando detalhes do pet...</p>
         )}
-        </CardWrapper>
+      </CardWrapper>
 
-        <DropdownComponent />
-        {
-          activities.map((ac: any) => <PetAppointmentCard
-            title={ac.title} dateTime={new Date(ac.time)} />)
-        }
+      <DropdownComponent />
+      {
+        activities.map((ac: any) => <PetAppointmentCard
+          title={ac.title}
+          dateTime={new Date(ac.time)}
+          activityId={ac._id}
+          petId={ac.petId}
+          type={ac.type}
+          description={ac.description}
+        />)
+      }
 
       {isModalOpen && (
         <ModalComponent
