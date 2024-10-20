@@ -70,6 +70,57 @@ export const createPet = async (
   }
 };
 
+// Função para atualizar um pet existente
+export const updatePet = async (
+  id: string,  // Alterado de petId para id
+  name: string, 
+  species: string, 
+  breed: string, 
+  birthDate: string, 
+  sex: string, 
+  color: string, 
+  isAdopted: boolean, 
+  dateAdoption?: string, 
+  photo?: string
+) => {
+  try {
+    const token = getCookie('token'); 
+    console.log(`id: ${id}, name: ${name}, species: ${species}, breed: ${breed}, birthDate: ${birthDate}, sex: ${sex}, color: ${color}, isAdopted: ${isAdopted}, dateAdoption: ${dateAdoption}, photo: ${photo}`);
+
+    if (!token) {
+      throw new Error('Token não encontrado');
+    }
+
+    // Define um URL genérico de foto se `photo` não for fornecido
+    const defaultPhotoUrl = 'https://example.com/photos/rex.jpg';
+    
+    const response = await axiosInstance.put(`/pet`, {
+      id, // Alterado de petId para id
+      name,
+      species,
+      breed,
+      birthDate,
+      sex,
+      color,
+      isAdopted,
+      dateAdoption,
+      photo: photo || defaultPhotoUrl, // Usa a foto genérica se a foto não for fornecida
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Passa o token no header
+      },
+    });
+
+    return response.data; // Retorna os dados da resposta se necessário
+
+  } catch (error) {
+    console.error('Erro ao atualizar o pet:', error);
+    throw error;
+  }
+};
+
+
+
 
 // Função para listar os pets, pegando o token e userId dos cookies
 export const listPets = async () => {

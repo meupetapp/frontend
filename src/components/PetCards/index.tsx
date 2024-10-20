@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Card, PetImage, PetInfo, PetName, PetBreed, PetDetails, LastMeal, MealText, MealTime, IconWrapper, FlexContainer, PetInfoContainer } from './styles';
+import {
+  Card, PetImage, PetInfo, PetName, PetBreed, PetDetails, LastMeal, MealText, MealTime, IconWrapper, FlexContainer, PetInfoContainer
+} from './styles';
 import IconComponent from '../IconComponent';
 
-const PetCards = ({ SelectIcon, pet }) => {
+const PetCards = ({ pet, isEditPage, onEditClick }) => {
   const router = useRouter();
 
   // Função para calcular a idade do pet em anos e meses
@@ -48,14 +50,25 @@ const PetCards = ({ SelectIcon, pet }) => {
         </PetInfoContainer>
 
         <IconWrapper style={{ top: '10px', right: '40px' }}>
-          <div onClick={handlePetSelection}>
-            <IconComponent
-              src={SelectIcon}
-              alt="Arrow Icon"
-              width="35px"
-              height="35px"
-            />
-          </div>
+          {isEditPage ? (
+            <div onClick={onEditClick}>
+              <IconComponent
+                src="/icons/Edit.svg" // Ícone de edição para a página de edição
+                alt="Edit Icon"
+                width="35px"
+                height="35px"
+              />
+            </div>
+          ) : (
+            <div onClick={handlePetSelection}>
+              <IconComponent
+                src="/icons/Select.svg" // Ícone de seleção para outras páginas
+                alt="Select Icon"
+                width="35px"
+                height="35px"
+              />
+            </div>
+          )}
         </IconWrapper>
       </FlexContainer>
 

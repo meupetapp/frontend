@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode,CSSProperties  } from 'react';
 import { FormWrapper, PageContainer, FormContainer, GreenPageContainer } from './styles'; // Importa os estilos
 
 // Define que o componente aceita filhos (children)
@@ -14,11 +14,19 @@ export const PageContainerComponent: React.FC<PropsWithChildren> = ({ children }
     return <PageContainer>{children}</PageContainer>;
 };
 
-// Tornando onSubmit opcional
-export const FormContainerComponent: React.FC<PropsWithChildren & { onSubmit?: (e: React.FormEvent) => void }> = ({ children, onSubmit }) => {
-    return <FormContainer onSubmit={onSubmit}>{children}</FormContainer>;
-};
-
+// Adiciona a propriedade style opcional para o componente
+type FormContainerComponentProps = PropsWithChildren & { 
+    onSubmit?: (e: React.FormEvent) => void, 
+    style?: CSSProperties 
+  };
+  
+  export const FormContainerComponent: React.FC<FormContainerComponentProps> = ({ children, onSubmit, style }) => {
+    return (
+      <FormContainer onSubmit={onSubmit} style={style}>
+        {children}
+      </FormContainer>
+    );
+  };
 export const GreenPageContainerComponent: React.FC<PropsWithChildren> = ({ children }) => {
     return <GreenPageContainer>{children}</GreenPageContainer>;
 };
