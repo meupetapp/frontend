@@ -9,7 +9,8 @@ type ModalComponentProps = {
   onAddAttachment?: () => void;
   showNewActivityButton?: boolean;
   showNewPetButton?: boolean;
-  manageAccess?: boolean; // Nova prop para o modal "Gerenciar Acesso"
+  manageAccess?: boolean; 
+  showUserPermission?:boolean;// Nova prop para o modal "Gerenciar Acesso"
   deletePet?: boolean;    // Nova prop para o modal "Deletar Pet"
   addImage?: boolean;
   addAnexo?: boolean;
@@ -111,3 +112,4 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
 };
 
 export default ModalComponent;
+
