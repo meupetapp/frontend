@@ -55,9 +55,9 @@ const EditPet: React.FC = () => {
       <IconComponent
         src="/icons/More.svg"
         alt="Mais opções"
-        height='65px'
-        width='65px'
-        top='5px'
+        height='40px'
+        width='40px'
+        top='25px'
         right='15px'
         onClick={handleMoreClick} // Abre o modal
       />

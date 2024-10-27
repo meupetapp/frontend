@@ -165,6 +165,7 @@ const HomePage: React.FC = () => {
 
 
 
+
       {isModalOpen && (
         <ModalComponent
           closeModal={handleCloseModal}

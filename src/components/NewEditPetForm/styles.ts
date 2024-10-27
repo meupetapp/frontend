@@ -127,6 +127,6 @@ export const ImageIcon = styled.img`
 export const Text = styled.text`
 font-family: 'Lato', sans-serif;
 color: #556270;
-margin-left: 20px;
+margin-left: 137px;
 font-size: 14px;
 `;

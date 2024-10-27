@@ -152,6 +152,7 @@ const NewEditPetForm: React.FC<NewEditPetFormProps> = ({ pet }) => {
               display: "flex",
               alignItems: "center",
               width: "100%",
+              position: "relative",
             }}
           >
             <div style={{ gap: "18px" }}>
@@ -159,7 +160,7 @@ const NewEditPetForm: React.FC<NewEditPetFormProps> = ({ pet }) => {
                 style={{ display: "flex", alignItems: "center", marginBottom: "45px" }}
               >
                 <Text>Adotado</Text>
-                <div style={{ position: "absolute", marginTop: "52px", marginLeft: "22px" }}>
+                <div style={{ position: "absolute", marginTop: "52px", marginLeft: "137px" }}>
                   <div
                     onClick={() => setToggle(!toggle)}
                     style={{

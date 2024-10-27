@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import PetCards from '@/components/PetCards';
-import { PageContainerComponent } from '@/components/FormComponents';
-import IconComponent from '@/components/IconComponent';
-import { CardWrapper } from '@/components/Cardscomponents/styles';
-import PetAppointmentCard from '@/components/ActivityList';
-import DropdownComponent from '@/components/DropdownComponent';
-import ModalComponent from '@/components/ModalComponent';
-import { useRouter } from 'next/router';
-import { getPetDetail } from '@/service/petService';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import PetCards from "@/components/PetCards";
+import { PageContainerComponent } from "@/components/FormComponents";
+import IconComponent from "@/components/IconComponent";
+import { CardWrapper } from "@/components/Cardscomponents/styles";
+import PetAppointmentCard from "@/components/ActivityList";
+import DropdownComponent from "@/components/DropdownComponent";
+import ModalComponent from "@/components/ModalComponent";
+import { useRouter } from "next/router";
+import { getPetDetail } from "@/service/petService";
+import Link from "next/link";
 
 const ActivityPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,19 +30,22 @@ const ActivityPage: React.FC = () => {
           setActivities(res.activities);
         })
         .catch((error) => {
-          console.error('Erro ao buscar detalhes do pet:', error);
+          console.error("Erro ao buscar detalhes do pet:", error);
         });
-
     }
   }, [petId]);
 
   useEffect(() => {
     if (!petId) {
-      router.push('/home');
+      router.push("/home");
     }
   });
 
-  const handleOpenModal = (showActivity: boolean, showPet: boolean, showUserPermission: boolean) => {
+  const handleOpenModal = (
+    showActivity: boolean,
+    showPet: boolean,
+    showUserPermission: boolean
+  ) => {
     setShowNewActivityButton(showActivity);
     setShowNewPetButton(showPet);
     setShowUserPermission(showUserPermission);
@@ -56,8 +59,8 @@ const ActivityPage: React.FC = () => {
   const handleEditClick = () => {
     if (petId) {
       router.push({
-        pathname: '/editpet',
-        query: { petId }
+        pathname: "/editpet",
+        query: { petId },
       });
     }
   };
@@ -67,7 +70,12 @@ const ActivityPage: React.FC = () => {
       <Link href="/home">
         <IconComponent left="15px" src="/icons/Arrow.svg" alt="Voltar" />
       </Link>
-      <IconComponent right="15px" src="/icons/Add.svg" alt="Adicionar" onClick={() => handleOpenModal(true, false, true)} />
+      <IconComponent
+        right="15px"
+        src="/icons/Add.svg"
+        alt="Adicionar"
+        onClick={() => handleOpenModal(true, false, true)}
+      />
 
       <CardWrapper>
         {pet ? (
@@ -78,8 +86,8 @@ const ActivityPage: React.FC = () => {
       </CardWrapper>
 
       <DropdownComponent />
-      {
-        activities.map((ac: any) => <PetAppointmentCard
+      {activities.map((ac: any) => (
+        <PetAppointmentCard
           title={ac.title}
           dateTime={new Date(ac.time)}
           activityId={ac._id}
@@ -87,15 +95,18 @@ const ActivityPage: React.FC = () => {
           type={ac.type}
           description={ac.description}
           comments={encodeURIComponent(JSON.stringify(ac.comments))}
-        />)
-      }
+          photo={ac.photo}
+        />
+      ))}
 
       {isModalOpen && (
         <ModalComponent
-                  closeModal={handleCloseModal}
-                  showNewActivityButton={showNewActivityButton}
-                  showNewPetButton={showNewPetButton}
-                  showUserPermission={showUserPermission} addComment={false}        />
+          closeModal={handleCloseModal}
+          showNewActivityButton={showNewActivityButton}
+          showNewPetButton={showNewPetButton}
+          showUserPermission={showUserPermission}
+          addComment={false}
+        />
       )}
     </PageContainerComponent>
   );

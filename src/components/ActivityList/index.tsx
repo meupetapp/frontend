@@ -1,6 +1,14 @@
-import React from 'react';
-import { CardTitle, CardDate, Button, CardWrapper, CardAuthor, CardPet } from './styles';
-import { useRouter } from 'next/router';
+import React from "react";
+import {
+  CardTitle,
+  CardDate,
+  Button,
+  CardWrapper,
+  CardAuthor,
+  CardPet,
+} from "./styles";
+import { useRouter } from "next/router";
+
 
 interface PetAppointmentCardProps {
   title: string;
@@ -20,6 +28,7 @@ const PetAppointmentCard: React.FC<PetAppointmentCardProps> = ({
   type, 
   description,
   comments
+
 }) => {
   const router = useRouter();
 
@@ -33,42 +42,43 @@ const PetAppointmentCard: React.FC<PetAppointmentCardProps> = ({
       type,
       description: encodeURIComponent(description),
       comments: comments, // Passando os comentários codificados diretamente
+      photo,
     });
 
     router.push({
-      pathname: '/newActivity',
+      pathname: "/newActivity",
       query: {
-        mode: 'view',
+        mode: "view",
         title: encodeURIComponent(title),
         dateTime: dateTime.toISOString(),
         activityId,
         petId,
         type,
         description: encodeURIComponent(description),
-        comments: encodeURIComponent(JSON.stringify(comments)) // Certifique-se de codificar os comentários como JSON
+        comments: encodeURIComponent(JSON.stringify(comments)), // Certifique-se de codificar os comentários como JSON
+        photo,
       },
     });
   };
-
 
   return (
     <CardWrapper>
       <CardTitle>{title}</CardTitle> {/* Exibe apenas o título */}
       <CardDate>
-        {dateTime.toLocaleString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
+        {dateTime.toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
           hour12: false, // Usar formato 24 horas
         })}
       </CardDate>
-      <Button onClick={handleViewActivity}>Visualizar</Button> {/* O botão envia os dados */}
+      <Button onClick={handleViewActivity}>Visualizar</Button>{" "}
+      {/* O botão envia os dados */}
     </CardWrapper>
   );
 };
-
 
 export default PetAppointmentCard;
 
@@ -85,7 +95,7 @@ interface GeneralActivityListProps {
 }
 
 export const GeneralActivityList: React.FC<GeneralActivityListProps> = ({
-  title,
+   title,
   date,
   activityId,
   petId,
@@ -93,7 +103,9 @@ export const GeneralActivityList: React.FC<GeneralActivityListProps> = ({
   description,
   petName,
   author,
+
   comments
+
 }) => {
   const router = useRouter();
 
@@ -107,33 +119,34 @@ export const GeneralActivityList: React.FC<GeneralActivityListProps> = ({
       type,
       description: encodeURIComponent(description),
       comments,
+      photo,
     });
 
     router.push({
-      pathname: '/newActivity',
+      pathname: "/newActivity",
       query: {
-        mode: 'view',
+        mode: "view",
         title: encodeURIComponent(title),
         dateTime: date.toISOString(),
         activityId,
         petId,
         type,
         description: encodeURIComponent(description),
-        comments: encodeURIComponent(JSON.stringify(comments)) // Certifique-se de codificar os comentários como JSON
+        comments: encodeURIComponent(JSON.stringify(comments)), // Certifique-se de codificar os comentários como JSON
+        photo,
       },
     });
-    
   };
 
   return (
-    <CardWrapper onClick={handleViewActivity}> {/* Adicionando o evento de clique */}
+    <CardWrapper onClick={handleViewActivity}>
       <CardTitle>{title}</CardTitle>
       <CardPet>{petName}</CardPet>
       <CardDate>
-        {new Date(date).toLocaleString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
+        {new Date(date).toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
         })}
       </CardDate>
       <CardAuthor>por {author}</CardAuthor>
@@ -141,4 +154,3 @@ export const GeneralActivityList: React.FC<GeneralActivityListProps> = ({
     </CardWrapper>
   );
 };
-

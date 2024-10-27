@@ -6,17 +6,41 @@ export const Button = styled.button`
   justify-content: center;
   width: 153px;
   height: 50px;
-  background-color: #4A5568;
+  background-color: #556270;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: opacity 0.3s ease;
+  font-size: 20px;
+  font-family: 'Lato', sans-serif;
   margin-bottom:15px;
+  color: #F7EFD8;
   &:hover {
     background-color: #2D3748;
   }
 `;
+
+// padding: 10px;
+// font-size: 20px;
+// width: 145px;
+// height: 50px;
+// font-family: 'Lato', sans-serif;
+// color: #F7EFD8;
+// margin-top: 30px;
+// background-color: #556270; /* Como vamos usar uma imagem, o fundo é transparente */
+// border: none;
+// border-radius: 20px;
+// cursor: pointer;
+// display: flex;
+// align-items: center;
+// justify-content: center;
+// transition: opacity 0.3s ease;
+
+// &:hover {
+//   background-color: #2D3748;  /* Cor de fundo mais escura ao passar o mouse */
+// }
+// `;
 
 export const P = styled.p`
   text-align: center;
