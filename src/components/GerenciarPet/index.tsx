@@ -18,7 +18,7 @@ import {
   Dropdown,
 } from "./styles";
 import AccessModal from "../AcessModal";
-import { listPets } from "@/service/petService"; // Certifique-se de que o caminho está correto
+import { getPetDetail } from "@/service/petService"; // Use a função correta para buscar um pet específico
 import { useRouter } from "next/router";
 import { listUserPermissionByPet } from "@/service/userPermissionService";
 
@@ -27,39 +27,45 @@ const GerenciarPet: React.FC = () => {
   const { petId } = router.query; // Obtém o petId da URL
   const [expandedPet, setExpandedPet] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [petsData, setPets] = useState<any[]>([]); // Armazena os dados dos pets
-  useEffect(() => {
-    listPets()
-      .then((res) => {
-        setPets(res);
-      })
-      .catch((error) => {
-        console.error("Erro ao listar pets:", error);
-      });
-  }, []);
-
+  const [petData, setPetData] = useState<any>(null); // Armazena os dados de um pet específico
   const [userPermissions, setUserPermissions] = useState<any[]>([]);
 
+  // Obtém os detalhes do pet específico quando o petId é fornecido
+  useEffect(() => {
+    if (petId) {
+      getPetDetail(petId as string)
+        .then((res) => {
+          setPetData(res); // Armazena os dados do pet retornado
+        })
+        .catch((error) => {
+          console.error("Erro ao obter detalhes do pet:", error);
+        });
+    }
+  }, [petId]); // Executa o efeito sempre que o petId mudar
+
+  // Função para listar permissões de usuários por petId
   const listUserPermissions = (petId: string) => {
     listUserPermissionByPet(petId)
       .then((res) => {
-        setUserPermissions(res.userPermissions);
+        setUserPermissions(res.userPermissions); // Armazena as permissões de usuários
       })
       .catch((error) => {
         console.error("Erro ao listar userPermissions", error);
       });
   };
 
+  // Alterna o estado de expansão e chama a função para listar as permissões
   const toggleExpand = (petId: string) => {
-    console.log('@petid', petId)
     setExpandedPet(expandedPet === petId ? '' : petId);
-    listUserPermissions(petId)
+    listUserPermissions(petId); // Certifica-se de listar as permissões ao expandir
   };
 
+  // Abre o modal de acesso
   const handleOpenModal = () => {
-    console.log("id=", petId), setIsModalOpen(true);
+    setIsModalOpen(true);
   };
 
+  // Fecha o modal de acesso
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -70,50 +76,47 @@ const GerenciarPet: React.FC = () => {
         <TitleWrapperComponent>
           <TitleText>Gerenciamento</TitleText>
         </TitleWrapperComponent>
-        {/* <button onClick={ () => console.log(expandedPet, user)}>teste</button> */}
 
-        {petsData.length > 0 ? (
-          petsData.map((pet) => (
-            <PetContainer key={pet.id}>
-              <PetHeader onClick={() => toggleExpand(pet._id)}>
-                <PetImage src={pet.photo} />
-                <PetName>{pet.name}</PetName>
-                <IconExpand>
-                  <img
-                    src={
-                      expandedPet === pet._id
-                        ? "/icons/Arrow_Select_Up.svg"
-                        : "/icons/Arrow_Select_Down.svg"
-                    }
-                    alt="Expandir"
-                    width="20px"
-                    height="20px"
-                  />
-                </IconExpand>
-              </PetHeader>
+        {petData && petData.pet ? ( // Verifica se os dados do pet estão disponíveis
+          <PetContainer key={petData.pet._id}>
+            <PetHeader onClick={() => toggleExpand(petData.pet._id)}>
+              <PetImage src={petData.pet.photo} />
+              <PetName>{petData.pet.name}</PetName>
+              <IconExpand>
+                <img
+                  src={
+                    expandedPet === petData.pet._id
+                      ? "/icons/Arrow_Select_Up.svg"
+                      : "/icons/Arrow_Select_Down.svg"
+                  }
+                  alt="Expandir"
+                  width="20px"
+                  height="20px"
+                />
+              </IconExpand>
+            </PetHeader>
 
-              {expandedPet === pet._id && (
-                <Dropdown>
-                  <UserList>
-                    {Array.isArray(userPermissions) && userPermissions.length > 0 ? ( // Verificação se "users" é um array válido
-                      userPermissions.map((userPermission: any) => (
-                        <UserItem key={userPermission.id}>
-                          <UserAvatar src={userPermission.avatar} />
-                          <span>{userPermission.username}</span>
-                          <Role>{userPermission.permissions[0]}</Role>
-                        </UserItem>
-                      ))
-                    ) : (
-                      <p>Nenhum usuário com acesso</p> // Mensagem caso não haja usuários
-                    )}
-                  </UserList>
-                  <AddAccessButton onClick={handleOpenModal}>
-                    Novo Acesso
-                  </AddAccessButton>
-                </Dropdown>
-              )}
-            </PetContainer>
-          ))
+            {expandedPet === petData.pet._id && (
+              <Dropdown>
+                <UserList>
+                  {Array.isArray(userPermissions) && userPermissions.length > 0 ? (
+                    userPermissions.map((userPermission: any) => (
+                      <UserItem key={userPermission.id}>
+                        <UserAvatar src={userPermission.avatar} />
+                        <span>{userPermission.username}</span>
+                        <Role>{userPermission.permissions[0]}</Role>
+                      </UserItem>
+                    ))
+                  ) : (
+                    <p style={{ color: "black" }}>Nenhum usuário com acesso</p>
+                  )}
+                </UserList>
+                <AddAccessButton onClick={handleOpenModal}>
+                  Novo Acesso
+                </AddAccessButton>
+              </Dropdown>
+            )}
+          </PetContainer>
         ) : (
           <p>Nenhum pet encontrado</p>
         )}

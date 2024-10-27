@@ -2,7 +2,25 @@ import React from 'react';
 import { CardTitle, CardDate, Button, CardWrapper, CardAuthor, CardPet } from './styles';
 import { useRouter } from 'next/router';
 
-const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, description,comments }) => {
+interface PetAppointmentCardProps {
+  title: string;
+  dateTime: Date; // Date em vez de string, para refletir o uso de .toISOString()
+  activityId: number;
+  petId: number;
+  type: string;
+  description: string;
+  comments:string;
+}
+
+const PetAppointmentCard: React.FC<PetAppointmentCardProps> = ({ 
+  title, 
+  dateTime, 
+  activityId, 
+  petId, 
+  type, 
+  description,
+  comments
+}) => {
   const router = useRouter();
 
   // Função para redirecionar para a página de atividade, passando os parâmetros necessários
@@ -54,7 +72,29 @@ const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, descript
 
 export default PetAppointmentCard;
 
-export const GeneralActivityList = ({ title, date, activityId, petId, type, description, petName, author,comments }) => {
+interface GeneralActivityListProps {
+  title: string;
+  date: Date; // Usando Date para refletir um objeto de data
+  activityId: number;
+  petId: number;
+  type: string;
+  description: string;
+  petName: string;
+  author: string;
+  comments:string;
+}
+
+export const GeneralActivityList: React.FC<GeneralActivityListProps> = ({
+  title,
+  date,
+  activityId,
+  petId,
+  type,
+  description,
+  petName,
+  author,
+  comments
+}) => {
   const router = useRouter();
 
   // Função para redirecionar para a página de atividade, passando os parâmetros necessários

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   FormWrapper,
   FormContainer,
@@ -25,19 +25,44 @@ const Gender = "/icons/Gender.svg";
 const Color = "/icons/Color.svg";
 import { updatePet } from "@/service/petService";
 import { useRouter } from 'next/router'; 
+interface NewEditPetFormProps {
+  pet?: {
+    name: string;
+    species: string;
+    breed: string;
+    birthDate: string;
+    gender: string;
+    color: string;
+    adoptionDate?: string;
+  };
+}
 
-const NewEditPetForm: React.FC = () => {
+const NewEditPetForm: React.FC<NewEditPetFormProps> = ({ pet }) => {
 
   const router = useRouter();
   const { petId } = router.query;  // Obtém o petId da URL
-  const [name, setName] = useState("");
-  const [species, setSpecies] = useState("");
-  const [breed, setBreed] = useState("");
-  const [birth, setBirth] = useState("");
-  const [gender, setGender] = useState("");
-  const [color, setColor] = useState("");
-  const [adoption, setAdoption] = useState("");
-  const [toggle, setToggle] = useState<boolean>(false);
+  const [name, setName] = useState(pet?.name || "");
+  const [species, setSpecies] = useState(pet?.species || "");
+  const [breed, setBreed] = useState(pet?.breed || "");
+  const [birth, setBirth] = useState(pet?.birthDate || "");
+  const [gender, setGender] = useState(pet?.gender || "");
+  const [color, setColor] = useState(pet?.color || "");
+  const [adoption, setAdoption] = useState(pet?.adoptionDate || "");
+  const [toggle, setToggle] = useState(!!pet?.adoptionDate);
+  console.log(pet);
+  useEffect(() => {
+    if (pet) {
+      setName(pet.name || "");
+      setSpecies(pet.species || "");
+      setBreed(pet.breed || "");
+      setBirth(pet.birthDate ? new Date(pet.birthDate).toISOString().split("T")[0] : "");
+      setGender(pet.gender || "");
+      setColor(pet.color || "");
+      setAdoption(pet.adoptionDate ? new Date(pet.adoptionDate).toISOString().split("T")[0] : "");
+      setToggle(!!pet.adoptionDate);
+    }
+  }, [pet]);
+  console.log("data",birth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

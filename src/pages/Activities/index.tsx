@@ -71,7 +71,7 @@ const ActivityPage: React.FC = () => {
 
       <CardWrapper>
         {pet ? (
-          <PetCards pet={pet} isEditPage={true} onEditClick={handleEditClick} />
+          <PetCards pet={pet} SelectIcon="/icons/Edit.svg" isEditPage={true} onEditClick={handleEditClick} />
         ) : (
           <p>Carregando detalhes do pet...</p>
         )}

@@ -5,6 +5,15 @@ import { GreenPageContainerComponent } from '@/components/FormComponents';
 import NewActivityForm from '@/components/NewActivityForm';
 import Comments from '@/components/Comments';
 
+interface ActivityData {
+  title: string;
+  time: Date | null;
+  activityId: string | number;
+  description: string;
+  type: string;
+  petId: string | number;
+}
+
 const NewActivity: React.FC = () => {
   const router = useRouter();
   const { mode, title, dateTime, activityId, description, type, petId, comments } = router.query;

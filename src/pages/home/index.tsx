@@ -6,7 +6,7 @@ import { CardWrapper } from '@/components/Cardscomponents/styles';
 import ModalComponent from '@/components/ModalComponent';
 import StatusToggle from '@/components/StatusToggle';
 import { GeneralActivityList } from '@/components/ActivityList';
-import { listPets, getPetDetail } from '@/service/petService';
+import { listPets, getPetDetail, listPetsWithPermission } from '@/service/petService';
 
 const HomePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,14 +36,33 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    listPets()
-      .then((res) => {
-        fetchPetActivities(res);
-      })
-      .catch((error) => {
+    // Função para buscar todos os pets (do usuário e com permissões)
+    const fetchAllPets = async () => {
+      try {
+        // Lista de pets do usuário
+        const userPets = await listPets();
+        // Lista de pets que o usuário tem permissão
+        const permittedPets = await listPetsWithPermission();
+        console.log("pet permissao", permittedPets);
+    
+        // Mapeia os pets com permissão para o mesmo formato de userPets
+        const formattedPermittedPets = permittedPets.map((permission) => permission.pet);
+    
+        // Combina as listas de pets
+        const allPets = [...userPets, ...formattedPermittedPets];
+        console.log("pets", allPets);
+    
+        // Busca atividades para todos os pets combinados
+        fetchPetActivities(allPets);
+      } catch (error) {
         console.error("Erro ao buscar os pets:", error);
-      });
+      }
+    };
+    
+
+    fetchAllPets();
   }, []);
+
 
   const handleOpenModal = (showActivity: boolean, showPet: boolean) => {
     setShowNewActivityButton(showActivity);
@@ -94,55 +113,55 @@ const HomePage: React.FC = () => {
         setIsScheduled={setIsScheduled} // Passando a função para alterar o estado
       />
 
-      <CardWrapper style={{ marginTop: '5px' }}>
-        {petsWithActivities.map((pet) => (
-          <div key={pet._id}>
-            {pet.activities && pet.activities.length > 0 && (
-              <>
-                {/* Exibir até 3 atividades agendadas */}
-                {filterAndLimitActivities(pet.activities, true).length > 0 && isScheduled && (
-                  <>
-                    {filterAndLimitActivities(pet.activities, true).map((activity: any) => (
-                      <GeneralActivityList
-                        key={activity._id}
-                        title={activity.title}
-                        petName={pet.name}
-                        date={new Date(activity.time)}
-                        author={activity.author}
-                        activityId={activity._id} // Passar o ID da atividade
-                        petId={pet._id} // Passar o ID do pet
-                        type={activity.type}
-                        comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
-                        description={decodeURIComponent(activity.description)} // Decodifica aqui
-                      />
-                    ))}
-                  </>
-                )}
+<CardWrapper style={{ marginTop: '5px' }}>
+  {petsWithActivities.map((pet) => (
+    <div key={pet._id}>
+      {pet.activities && pet.activities.length > 0 && (
+        <>
+          {/* Exibir até 3 atividades agendadas */}
+          {filterAndLimitActivities(pet.activities, true).length > 0 && isScheduled && (
+            <>
+              {filterAndLimitActivities(pet.activities, true).map((activity: any) => (
+                <GeneralActivityList
+                  key={activity._id}
+                  title={activity.title}
+                  petName={pet.name}
+                  date={new Date(activity.time)}
+                  author={activity.author}
+                  activityId={activity._id} // Passar o ID da atividade
+                  petId={pet._id} // Passar o ID do pet
+                  type={activity.type}
+                  comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
+                  description={decodeURIComponent(activity.description)} // Decodifica aqui
+                />
+              ))}
+            </>
+          )}
 
-                {/* Exibir até 3 atividades ocorridas */}
-                {filterAndLimitActivities(pet.activities, false).length > 0 && !isScheduled && (
-                  <>
-                    {filterAndLimitActivities(pet.activities, false).map((activity: any) => (
-                       <GeneralActivityList
-                       key={activity._id}
-                       title={activity.title}
-                       petName={pet.name}
-                       date={new Date(activity.time)}
-                       author={activity.author}
-                       activityId={activity._id} // Passar o ID da atividade
-                       petId={pet._id} // Passar o ID do pet
-                       type={activity.type}
-                       comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
-                       description={decodeURIComponent(activity.description)} // Decodifica aqui
-                     />
-                    ))}
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        ))}
-      </CardWrapper>
+          {/* Exibir até 3 atividades ocorridas */}
+          {filterAndLimitActivities(pet.activities, false).length > 0 && !isScheduled && (
+            <>
+              {filterAndLimitActivities(pet.activities, false).map((activity: any) => (
+                <GeneralActivityList
+                  key={activity._id}
+                  title={activity.title}
+                  petName={pet.name}
+                  date={new Date(activity.time)}
+                  author={activity.author}
+                  activityId={activity._id} // Passar o ID da atividade
+                  petId={pet._id} // Passar o ID do pet
+                  type={activity.type}
+                  comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
+                  description={decodeURIComponent(activity.description)} // Decodifica aqui
+                />
+              ))}
+            </>
+          )}
+        </>
+      )}
+    </div>
+  ))}
+</CardWrapper>
 
 
 
