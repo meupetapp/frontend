@@ -1,15 +1,13 @@
-import axios from "axios";
-import { getCookie } from "./petService";
+import { getCookie } from "./petService"
+import axios from 'axios';
 const axiosInstance = axios.create({
   baseURL: `http://localhost:${process.env.NEXT_PUBLIC_PORT}`,
-})
-
+});
 export const createUserPermission = async (
   email: string,
   petId: string,
-  permissions: string[],
-  ) => {
-  console.log(permissions);
+  permission: string[],
+ ) => {
     try {
       const token = getCookie('token');
 
@@ -19,20 +17,20 @@ export const createUserPermission = async (
 
       const response = await axiosInstance.post('/permission', {
         userEmail: email,
-        permissions, // Este é o array de permissões
+        permission,
         petId
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
- 
+
       return response.data;
     } catch (error) {
       throw error;
     }
 } 
+
 export const listUserPermissionByPet = async (petId: string) => {
   try {
     const token = getCookie('token');
