@@ -114,6 +114,7 @@ const HomePage: React.FC = () => {
                         type={activity.type}
                         comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
                         description={decodeURIComponent(activity.description)} // Decodifica aqui
+                        photo={activity.photo}
                       />
                     ))}
                   </>

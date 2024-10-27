@@ -7,7 +7,7 @@ import Comments from '@/components/Comments';
 
 const NewActivity: React.FC = () => {
   const router = useRouter();
-  const { mode, title, dateTime, activityId, description, type, petId, comments } = router.query;
+  const { mode, title, dateTime, activityId, description, type, petId, comments, photo } = router.query;
 
   const [isViewMode, setIsViewMode] = useState(false);
   const [activityData, setActivityData] = useState<any>(null);
@@ -65,6 +65,7 @@ const NewActivity: React.FC = () => {
           type,
           petId,
           comments: parsedComments, // Certifique-se de que parsedComments é sempre um array
+          photo,
         });
       }
     }
