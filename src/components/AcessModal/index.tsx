@@ -56,12 +56,14 @@ const AccessModal: React.FC<AccessModalProps> = ({ closeModal, petId }) => {
         />
         <RoleOptions>
           <RoleButton
+            type="button" // Add this line to prevent form submission
             selected={permissions.includes('Edição')}
             onClick={() => handleRoleSelection('Edição')}
           >
             Edição
           </RoleButton>
           <RoleButton
+            type="button" // Add this line to prevent form submission
             selected={permissions.includes('Visualização')}
             onClick={() => handleRoleSelection('Visualização')}
           >

@@ -4,9 +4,15 @@ import axios from "axios";
 export const getCookie = (cookieName: string) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${cookieName}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
+  if (parts.length === 2) {
+    const cookiePart = parts.pop();
+    if (cookiePart) {
+      return cookiePart.split(';').shift();
+    }
+  }
   return null;
 };
+
 
 // Função para pegar o token e o userId dos cookies
 const getTokenFromCookies = () => {
@@ -154,16 +160,60 @@ export const listPets = async () => {
 // Nova função para buscar detalhes do pet
 export const getPetDetail = async (petId: string) => {
   const userId = getUserIdFromCookies();
-  console.log("Userid", userId);
   try {
     const response = await axiosInstance.get(`/pet/${petId}`, {
       headers: {
         Authorization: `Bearer ${userId}`,
       },
     });
+    console.log("Detalhes do pet:", response.data);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar detalhes do pet:", error);
     throw error;
   }
 };
+export const listPetsWithPermission = async () => {
+  const token = getCookie('token');
+  const userId = getCookie('userID');
+
+  if (!token || !userId) {
+    throw new Error("Token ou User ID não encontrado nos cookies");
+  }
+
+  try {
+    const response = await axiosInstance.get(`/permission/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Acessa diretamente a propriedade userPermissions
+    const petIds = response.data.userPermissions || []; 
+
+    if (petIds.length === 0) {
+      console.log("Nenhum pet com permissão encontrado.");
+      return [];
+    }
+console.log("ids",petIds);
+    const petsWithPermission = await Promise.all(
+      petIds.map(async (petId: string) => {
+        try {
+          const petDetail = await getPetDetail(petId);
+          console.log(`Detalhes do pet ${petId}:`, petDetail);
+          return petDetail;
+        } catch (error) {
+          console.error(`Erro ao buscar detalhes do pet ${petId}:`, error);
+          return null; // Retorna `null` se falhar
+        }
+      })
+    );
+
+    // Filtra pets nulos antes de retornar
+    return petsWithPermission.filter((pet) => pet !== null);
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    throw error;
+  }
+};
+

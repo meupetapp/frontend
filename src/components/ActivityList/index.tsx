@@ -9,15 +9,26 @@ import {
 } from "./styles";
 import { useRouter } from "next/router";
 
-const PetAppointmentCard = ({
-  title,
-  dateTime,
-  activityId,
-  petId,
-  type,
+
+interface PetAppointmentCardProps {
+  title: string;
+  dateTime: Date; // Date em vez de string, para refletir o uso de .toISOString()
+  activityId: number;
+  petId: number;
+  type: string;
+  description: string;
+  comments:string;
+}
+
+const PetAppointmentCard: React.FC<PetAppointmentCardProps> = ({ 
+  title, 
+  dateTime, 
+  activityId, 
+  petId, 
+  type, 
   description,
-  comments,
-  photo,
+  comments
+
 }) => {
   const router = useRouter();
 
@@ -71,8 +82,20 @@ const PetAppointmentCard = ({
 
 export default PetAppointmentCard;
 
-export const GeneralActivityList = ({
-  title,
+interface GeneralActivityListProps {
+  title: string;
+  date: Date; // Usando Date para refletir um objeto de data
+  activityId: number;
+  petId: number;
+  type: string;
+  description: string;
+  petName: string;
+  author: string;
+  comments:string;
+}
+
+export const GeneralActivityList: React.FC<GeneralActivityListProps> = ({
+   title,
   date,
   activityId,
   petId,
@@ -80,8 +103,9 @@ export const GeneralActivityList = ({
   description,
   petName,
   author,
-  comments,
-  photo,
+
+  comments
+
 }) => {
   const router = useRouter();
 

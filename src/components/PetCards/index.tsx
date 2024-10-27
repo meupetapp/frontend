@@ -5,9 +5,25 @@ import {
 } from './styles';
 import IconComponent from '../IconComponent';
 
-const PetCards = ({ pet, isEditPage, onEditClick }) => {
-  const router = useRouter();
+interface Pet {
+  _id: string;
+  name: string;
+  birthDate: string | number | Date; // Para refletir os tipos usados na função `calculateAge`
+  breed: string;
+  photo: string; // Adicionei a propriedade 'photo' usada no componente
+  // Adicione outras propriedades do objeto `pet` conforme necessário
+}
 
+interface PetCardsProps {
+  SelectIcon: string; // Caminho do ícone como string
+  pet: Pet;
+  isEditPage?: boolean; // Tornando essa propriedade opcional com "?"
+  onEditClick?: () => void; // Função de callback opcional
+}
+
+
+const PetCards: React.FC<PetCardsProps> = ({ SelectIcon, pet, isEditPage, onEditClick  }) => {
+  const router = useRouter();
   // Função para calcular a idade do pet em anos e meses
   const calculateAge = (birthDate: string | number | Date) => {
     const birth = new Date(birthDate);
@@ -38,7 +54,6 @@ const PetCards = ({ pet, isEditPage, onEditClick }) => {
 
   return (
     <Card>
-
       <FlexContainer>
         <PetInfoContainer>
           <PetImage src={pet.photo} alt="Pet" />
