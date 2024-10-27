@@ -90,7 +90,7 @@ const NewActivity: React.FC = () => {
         <Comments comments={activityData?.comments || []} />
         // Passa os comentários se existir
       ) : (
-        <p>Sem comentários</p>
+        <p></p>
       )}
     </GreenPageContainerComponent>
   );
