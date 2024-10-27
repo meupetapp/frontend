@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { TitleInput, DateInput, PetDropdown, ActivityTypeDropdown, DescriptionInput, InputRow, AttachmentContainer, AttachmentBlock, FormContainer } from './styles';
+import IconComponent from '@/components/IconComponent'; // Importando o componente de ícone
 import { listPets } from '@/service/petService';
 import { Button } from '../ActivityList/styles';
 import { createActivity } from '@/service/activityService';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'; 
+import ModalComponent from '@/components/ModalComponent'; // Importando o modal
 
 interface NewActivityFormProps {
   isViewMode?: boolean; // Adicionando prop para View Mode
@@ -18,6 +20,7 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
   const [type, setType] = useState(activityData?.type || '');
   const [description, setDescription] = useState(activityData?.description || '');
   const [attachments, setAttachments] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar a visibilidade do modal
   const router = useRouter();
 
   useEffect(() => {
@@ -130,11 +133,22 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
         required
         readOnly={isViewMode} // readOnly para View Mode
       />
+  
 
-      {!isViewMode && ( // Só mostra o botão se não estiver no modo de visualização
-        <Button onClick={handleSubmit}>
-          Adicionar Atividade
-        </Button>
+      {/* Ícone para abrir o modal */}
+      <IconComponent src="/icons/Add.svg" alt="Adicionar Anexo" onClick={() => setIsModalOpen(true)} />
+
+      {/* Modal para adicionar Imagem, Anexo, Comentário */}
+      {isModalOpen && (
+        <ModalComponent 
+          closeModal={() => setIsModalOpen(false)} 
+          addImage={true} 
+          addAnexo={true} 
+          addComment={true}
+          showNewActivityButton = {false}
+          showNewPetButton = {false}
+          onAddAttachment={addAttachment}
+        />
       )}
     </FormContainer>
   );

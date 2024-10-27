@@ -2,7 +2,7 @@ import React from 'react';
 import { CardTitle, CardDate, Button, CardWrapper, CardAuthor, CardPet } from './styles';
 import { useRouter } from 'next/router';
 
-const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, description }) => {
+const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, description,comments }) => {
   const router = useRouter();
 
   // Função para redirecionar para a página de atividade, passando os parâmetros necessários
@@ -14,6 +14,7 @@ const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, descript
       petId,
       type,
       description: encodeURIComponent(description),
+      comments: comments, // Passando os comentários codificados diretamente
     });
 
     router.push({
@@ -26,6 +27,7 @@ const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, descript
         petId,
         type,
         description: encodeURIComponent(description),
+        comments: encodeURIComponent(JSON.stringify(comments)) // Certifique-se de codificar os comentários como JSON
       },
     });
   };
@@ -52,7 +54,7 @@ const PetAppointmentCard = ({ title, dateTime, activityId, petId, type, descript
 
 export default PetAppointmentCard;
 
-export const GeneralActivityList = ({ title, date, activityId, petId, type, description, petName, author }) => {
+export const GeneralActivityList = ({ title, date, activityId, petId, type, description, petName, author,comments }) => {
   const router = useRouter();
 
   // Função para redirecionar para a página de atividade, passando os parâmetros necessários
@@ -64,6 +66,7 @@ export const GeneralActivityList = ({ title, date, activityId, petId, type, desc
       petId,
       type,
       description: encodeURIComponent(description),
+      comments,
     });
 
     router.push({
@@ -76,8 +79,10 @@ export const GeneralActivityList = ({ title, date, activityId, petId, type, desc
         petId,
         type,
         description: encodeURIComponent(description),
+        comments: encodeURIComponent(JSON.stringify(comments)) // Certifique-se de codificar os comentários como JSON
       },
     });
+    
   };
 
   return (

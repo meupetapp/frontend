@@ -53,6 +53,15 @@ const ActivityPage: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleEditClick = () => {
+    if (petId) {
+      router.push({
+        pathname: '/editpet',
+        query: { petId }
+      });
+    }
+  };
+
   return (
     <PageContainerComponent>
       <Link href="/home">
@@ -62,7 +71,7 @@ const ActivityPage: React.FC = () => {
 
       <CardWrapper>
         {pet ? (
-          <PetCards pet={pet} SelectIcon="/icons/Edit.svg" />
+          <PetCards pet={pet} isEditPage={true} onEditClick={handleEditClick} />
         ) : (
           <p>Carregando detalhes do pet...</p>
         )}
@@ -77,16 +86,16 @@ const ActivityPage: React.FC = () => {
           petId={ac.petId}
           type={ac.type}
           description={ac.description}
+          comments={encodeURIComponent(JSON.stringify(ac.comments))}
         />)
       }
 
       {isModalOpen && (
         <ModalComponent
-          closeModal={handleCloseModal}
-          showNewActivityButton={showNewActivityButton}
-          showNewPetButton={showNewPetButton}
-          showUserPermission={showUserPermission}
-        />
+                  closeModal={handleCloseModal}
+                  showNewActivityButton={showNewActivityButton}
+                  showNewPetButton={showNewPetButton}
+                  showUserPermission={showUserPermission} addComment={false}        />
       )}
     </PageContainerComponent>
   );

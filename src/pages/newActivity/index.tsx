@@ -7,31 +7,72 @@ import Comments from '@/components/Comments';
 
 const NewActivity: React.FC = () => {
   const router = useRouter();
-  const { mode, title, dateTime, activityId, description, type, petId } = router.query;
-  const [isViewMode, setIsViewMode] = useState(false);
-  const [activityData, setActivityData] = useState(null);
+  const { mode, title, dateTime, activityId, description, type, petId, comments } = router.query;
 
-  // Usar o efeito para esperar que a query esteja completamente pronta
+  const [isViewMode, setIsViewMode] = useState(false);
+  const [activityData, setActivityData] = useState<any>(null);
+
   useEffect(() => {
-    if (router.isReady) { // Certifique-se de que o router está pronto
+    if (router.isReady) {
+      console.log("Query inicial de comentários:", comments);
+  
       if (mode === 'view') {
         setIsViewMode(true);
-
+  
         // Convertemos a data de volta para o formato Date
         const parsedDateTime = dateTime ? new Date(decodeURIComponent(dateTime as string)) : null;
-
-        // Preenchemos os dados da atividade com base na query
+  
+        let parsedComments = [];
+        if (comments) {
+          try {
+            // Primeira decodificação
+            let decodedComments = decodeURIComponent(comments as string);
+  
+            // Decodificação extra se necessário
+            while (decodedComments.includes('%')) {
+              decodedComments = decodeURIComponent(decodedComments);
+            }
+  
+            console.log("Comentários decodificados corretamente:", decodedComments);
+  
+            // Remover aspas extras, se existirem
+            if (decodedComments.startsWith('"') && decodedComments.endsWith('"')) {
+              decodedComments = decodedComments.slice(1, -1);
+            }
+  
+            // Agora, finalmente, faz o parse do JSON
+            parsedComments = JSON.parse(decodedComments.replace(/\\"/g, '"')); // Substitui as aspas escapadas
+  
+            console.log("Comentários parseados:", parsedComments);
+  
+            // Verifique se parsedComments realmente é um array
+            if (!Array.isArray(parsedComments)) {
+              console.error("Comentários não são um array:", parsedComments);
+              parsedComments = []; // Se não for um array, defina como array vazio
+            }
+          } catch (error) {
+            console.error("Erro ao fazer o parse dos comentários:", error);
+            parsedComments = []; // Define um array vazio em caso de erro
+          }
+        }
+  
+        // Atualize os dados da atividade, incluindo os comentários
         setActivityData({
           title: decodeURIComponent(title as string),
           time: parsedDateTime,
           activityId,
-          description, type, petId
+          description: decodeURIComponent(description as string),
+          type,
+          petId,
+          comments: parsedComments, // Certifique-se de que parsedComments é sempre um array
         });
       }
     }
-  }, [router.isReady, mode, title, dateTime, activityId]);
+  }, [router.isReady, mode, title, dateTime, activityId, description, comments, type]);
+  
 
-  console.log("dados da atividde passados>:", activityData);
+  console.log('Dados da atividade:', activityData);
+
   const handleAddAttachment = () => {
     console.log('Adicionar Anexo');
   };
@@ -45,7 +86,12 @@ const NewActivity: React.FC = () => {
         )}
       </div>
       <NewActivityForm isViewMode={isViewMode} activityData={activityData} />
-      <Comments />
+      {activityData?.comments && activityData.comments.length > 0 ? (
+        <Comments comments={activityData?.comments || []} />
+        // Passa os comentários se existir
+      ) : (
+        <p>Sem comentários</p>
+      )}
     </GreenPageContainerComponent>
   );
 };

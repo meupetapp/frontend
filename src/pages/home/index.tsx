@@ -111,7 +111,8 @@ const HomePage: React.FC = () => {
                         author={activity.author}
                         activityId={activity._id} // Passar o ID da atividade
                         petId={pet._id} // Passar o ID do pet
-                        type={activity.type} // Passar o tipo de atividade
+                        type={activity.type}
+                        comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
                         description={decodeURIComponent(activity.description)} // Decodifica aqui
                       />
                     ))}
@@ -122,17 +123,18 @@ const HomePage: React.FC = () => {
                 {filterAndLimitActivities(pet.activities, false).length > 0 && !isScheduled && (
                   <>
                     {filterAndLimitActivities(pet.activities, false).map((activity: any) => (
-                      <GeneralActivityList
-                        key={activity._id}
-                        title={activity.title}
-                        petName={pet.name}
-                        date={new Date(activity.time)}
-                        author={activity.author}
-                        activityId={activity._id} // Passar o ID da atividade
-                        petId={pet._id} // Passar o ID do pet
-                        type={activity.type} // Passar o tipo de atividade
-                        description={decodeURIComponent(activity.description)} // Decodifica aqui
-                      />
+                       <GeneralActivityList
+                       key={activity._id}
+                       title={activity.title}
+                       petName={pet.name}
+                       date={new Date(activity.time)}
+                       author={activity.author}
+                       activityId={activity._id} // Passar o ID da atividade
+                       petId={pet._id} // Passar o ID do pet
+                       type={activity.type}
+                       comments={encodeURIComponent(JSON.stringify(activity.comments))} // Passar o tipo de atividade
+                       description={decodeURIComponent(activity.description)} // Decodifica aqui
+                     />
                     ))}
                   </>
                 )}
