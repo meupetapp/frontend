@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { TitleInput, DateInput, PetDropdown, ActivityTypeDropdown, DescriptionInput, InputRow, AttachmentContainer, AttachmentBlock, FormContainer } from './styles';
-import IconComponent from '@/components/IconComponent'; // Importando o componente de ícone
+import { TitleInput, DateInput, PetDropdown, ActivityTypeDropdown, DescriptionInput, InputRow, AttachmentContainer, FormContainer } from './styles';
+import IconComponent from '@/components/IconComponent';
 import { listPets } from '@/service/petService';
 import { Button } from '../ActivityList/styles';
 import { createActivity } from '@/service/activityService';
-import { useRouter } from 'next/router'; 
-import ModalComponent from '@/components/ModalComponent'; // Importando o modal
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 interface NewActivityFormProps {
-  isViewMode?: boolean; // Adicionando prop para View Mode
-  activityData?: any; // Dados para pré-popular os campos no modo de visualização
+  isViewMode?: boolean;
+  activityData?: any;
 }
 
 const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, activityData }) => {
@@ -19,8 +19,8 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
   const [petId, setPetId] = useState(activityData?.petId || '');
   const [type, setType] = useState(activityData?.type || '');
   const [description, setDescription] = useState(activityData?.description || '');
-  const [attachments, setAttachments] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar a visibilidade do modal
+  const [attachment, setAttachment] = useState<string | null>(activityData?.attachment || null);
+  const [photo, setPhoto] = useState<string | null>(activityData?.photo || null);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,14 +29,43 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
       setTime(activityData.time ? new Date(activityData.time).toISOString().slice(0, 16) : '');
       setPetId(activityData.petId || '');
       setType(activityData.type || '');
-      // Decodifica a descrição antes de definir no estado
       setDescription(decodeURIComponent(activityData.description || ''));
+      setAttachment(activityData.attachment || null);
+      setPhoto(activityData.photo || null);
     }
   }, [activityData]);
   
 
-  const addAttachment = () => {
-    setAttachments([...attachments, `Anexo ${attachments.length + 1}`]);
+  const addAttachment = async (file: File) => {
+    try {
+      // Solicita uma URL pré-assinada para upload
+      const response = await axios.post("http://localhost:3001/generate-upload-url", {
+        filename: file.name,
+      });
+      const { url } = response.data;
+
+      // Faz o upload do arquivo para o S3
+      await axios.put(url, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      // Define a URL do anexo
+      const uploadedUrl = url.split("?")[0]; // Remove parâmetros da URL
+      setAttachment(uploadedUrl);
+      alert("Anexo carregado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao carregar o anexo:", error);
+      alert("Erro ao carregar o anexo.");
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      addAttachment(file);
+    }
   };
 
   const handleSubmit = async () => {
@@ -51,6 +80,7 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
       petId,
       type,
       description,
+      photo: attachment || undefined, // Inclui a URL do anexo
     };
 
     try {
@@ -67,25 +97,22 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
   useEffect(() => {
     listPets().then((pets) => {
       setPets(pets);
-      // Se houver um petId vindo dos dados da atividade, usá-lo
       if (activityData?.petId) {
         setPetId(activityData.petId);
       } else if (pets.length > 0) {
-        // Se não houver petId, mas houver pets na lista, usa o primeiro pet
         setPetId(pets[0]._id);
       }
     });
-  }, [activityData]); // Observe que agora o useEffect depende de activityData também
-  
+  }, [activityData]);
 
   return (
-    <FormContainer style={{ display: 'flex' }}>
+    <FormContainer style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <TitleInput
         placeholder="Título..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        readOnly={isViewMode} // readOnly para View Mode
+        readOnly={isViewMode}
       />
       <InputRow>
         <DateInput
@@ -98,7 +125,7 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
         <PetDropdown
           value={petId}
           onChange={(e) => setPetId(e.target.value)}
-          disabled={isViewMode} // Disable no dropdown para View Mode
+          disabled={isViewMode}
         >
           {pets.map((pet) => (
             <option key={pet._id} value={pet._id}>
@@ -109,15 +136,33 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
       </InputRow>
 
       <AttachmentContainer>
-        {attachments.map((attachment, index) => (
-          <AttachmentBlock key={index}>{attachment}</AttachmentBlock>
-        ))}
+        <label htmlFor="file-input">
+          <img
+            src={attachment || photo || "/icons/AddImage.svg"}
+            alt="Adicionar Anexo"
+            style={{
+              width: attachment ? "100px" : "50px",
+              height: attachment ? "100px" : "50px",
+              borderRadius: "10px",
+              cursor: !isViewMode ? "pointer" : "default",
+            }}
+          />
+        </label>
+        {!isViewMode && (
+          <input
+            id="file-input"
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+        )}
       </AttachmentContainer>
 
       <ActivityTypeDropdown
         value={type}
         onChange={(e) => setType(e.target.value)}
-        disabled={isViewMode} // Disable no dropdown para View Mode
+        disabled={isViewMode}
       >
         <option value="">Tipo de Atividade</option>
         <option value="food">Alimentação</option>
@@ -131,25 +176,12 @@ const NewActivityForm: React.FC<NewActivityFormProps> = ({ isViewMode = false, a
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
-        readOnly={isViewMode} // readOnly para View Mode
+        readOnly={isViewMode}
       />
   
-
-      {/* Ícone para abrir o modal */}
-      <IconComponent src="/icons/Add.svg" alt="Adicionar Anexo" onClick={() => setIsModalOpen(true)} />
-
-      {/* Modal para adicionar Imagem, Anexo, Comentário */}
-      {isModalOpen && (
-        <ModalComponent 
-          closeModal={() => setIsModalOpen(false)} 
-          addImage={true} 
-          addAnexo={true} 
-          addComment={true}
-          showNewActivityButton = {false}
-          showNewPetButton = {false}
-          onAddAttachment={addAttachment}
-        />
-      )}
+      <Button onClick={handleSubmit} disabled={isViewMode}>
+        {isViewMode ? 'Visualizar' : 'Criar Atividade'}
+      </Button>
     </FormContainer>
   );
 };
