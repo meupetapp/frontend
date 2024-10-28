@@ -7,6 +7,7 @@ import ModalComponent from '@/components/ModalComponent';
 import StatusToggle from '@/components/StatusToggle';
 import { GeneralActivityList } from '@/components/ActivityList';
 import { listPets, getPetDetail } from '@/service/petService';
+import { useRouter } from 'next/router'; 
 
 const HomePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +15,7 @@ const HomePage: React.FC = () => {
   const [showNewPetButton, setShowNewPetButton] = useState(false);
   const [petsWithActivities, setPetsWithActivities] = useState<any[]>([]);
   const [isScheduled, setIsScheduled] = useState(true); // Estado para controlar o toggle (agendada ou ocorrida)
-
+  const router = useRouter();
   // Função para buscar as atividades dos pets
   const fetchPetActivities = async (pets: any[]) => {
     const petsWithActivities = await Promise.all(
@@ -74,6 +75,13 @@ const HomePage: React.FC = () => {
         top="40px"
         onClick={() => handleOpenModal(true, true)}
       />
+      <IconComponent
+       src="/icons/AddImage.svg"
+       alt="AddImage"
+       top="40px"
+       left="20px"
+       onClick={() => router.push('/editUserPerfil')}
+       />
 
       {/* Verificar se há pets cadastrados */}
       {petsWithActivities.length === 0 ? (
