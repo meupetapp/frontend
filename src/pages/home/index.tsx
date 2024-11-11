@@ -7,6 +7,7 @@ import ModalComponent from '@/components/ModalComponent';
 import StatusToggle from '@/components/StatusToggle';
 import { GeneralActivityList } from '@/components/ActivityList';
 import { listPets, getPetDetail } from '@/service/petService';
+import { getNotification } from '@/Service/notificationService';
 
 const HomePage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,6 +35,25 @@ const HomePage: React.FC = () => {
     );
     setPetsWithActivities(petsWithActivities);
   };
+
+  useEffect(() => {
+    async function requestNotification() {
+      const res = await getNotification();
+
+      if (Notification.permission === 'granted') {
+        new Notification('Notificação', { body: res.notifications[0].text });
+      } else if (Notification.permission === 'default') {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          new Notification('Notificação', { body: res.notifications[0].text });
+        }
+      } else {
+        console.log("Notificações bloqueadas pelo usuário.");
+      }
+    }
+
+    requestNotification();
+  }, []);
 
   useEffect(() => {
     listPets()
